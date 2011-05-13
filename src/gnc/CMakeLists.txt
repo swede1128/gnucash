@@ -28,6 +28,7 @@ SET (gnc_SOURCES
   main.cpp
   mainwindow.cpp
   mainwindow-file.cpp
+  dashboard.cpp
 )
 
 SET (gnc_QOBJECT_HEADERS
@@ -37,6 +38,7 @@ SET (gnc_QOBJECT_HEADERS
   SplitListModel.hpp
   SplitListView.hpp
   mainwindow.hpp
+  dashboard.hpp
 )
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
   Account.hpp
@@ -54,6 +56,7 @@ SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
 
 SET (gnc_FORMS
   mainwindow.ui
+  dashboard.ui
 )
 
 SET (gnc_RESOURCES
