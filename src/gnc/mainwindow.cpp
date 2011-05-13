@@ -32,6 +32,7 @@
 #include "config.h"
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
+#include "dashboard.hpp"
 
 // gnucash includes
 #include <glib/gi18n.h>
@@ -85,6 +86,9 @@ MainWindow::MainWindow()
     createActions();
     createToolBars();
     createStatusBar();
+
+    Dashboard *dboard = new Dashboard(this);
+    ui->tabWidget->addTab(dboard, tr("Dashboard"));
 
     /* Properties used by QSettings */
     QCoreApplication::setOrganizationName("Gnucash");
