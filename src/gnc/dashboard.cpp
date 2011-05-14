@@ -6,6 +6,12 @@ Dashboard::Dashboard(QWidget *parent) :
     ui(new Ui::Dashboard)
 {
     ui->setupUi(this);
+
+    /* TODO: create appropriate methods */
+    setCentralWidget(ui->firstPersonOverview);
+
+    this->tabifyDockWidget(ui->txnEntryBasic, ui->txnEntrySplit);
+    ui->txnEntryBasic->raise();
 }
 
 Dashboard::~Dashboard()
