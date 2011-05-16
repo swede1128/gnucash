@@ -7,7 +7,6 @@ Dashboard::Dashboard(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    /* TODO: create appropriate methods */
     setCentralWidget(ui->firstPersonOverview);
 
     this->tabifyDockWidget(ui->txnEntryBasic, ui->txnEntrySplit);

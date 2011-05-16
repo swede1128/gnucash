@@ -88,6 +88,7 @@ private:
     void createActions();
     void createToolBars();
     void createStatusBar();
+    void setIcons();
     void readSettings();
     void writeSettings();
     bool maybeSave();
