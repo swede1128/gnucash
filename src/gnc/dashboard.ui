@@ -57,7 +57,7 @@
     <number>4</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="lineDescription">
      <property name="geometry">
       <rect>
        <x>80</x>
@@ -67,7 +67,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lblDescription">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -80,7 +80,7 @@
       <string>Description</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="lblDate">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -103,7 +103,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="btnCreateTxn">
      <property name="geometry">
       <rect>
        <x>250</x>
@@ -116,7 +116,7 @@
       <string>Create Transaction</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_5">
+    <widget class="QLineEdit" name="lineNum">
      <property name="geometry">
       <rect>
        <x>80</x>
@@ -126,7 +126,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="lblTfrTo">
      <property name="geometry">
       <rect>
        <x>210</x>
@@ -139,7 +139,7 @@
       <string>Transfer To</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_4">
+    <widget class="QLineEdit" name="lineMemo">
      <property name="geometry">
       <rect>
        <x>80</x>
@@ -149,7 +149,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="label_8">
+    <widget class="QLabel" name="lblNum">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -162,7 +162,7 @@
       <string>Num</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="lblTfrFrom">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -175,7 +175,7 @@
       <string>Transfer From</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox_2">
+    <widget class="QComboBox" name="cmboTfrTo">
      <property name="geometry">
       <rect>
        <x>210</x>
@@ -185,7 +185,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_2">
+    <widget class="QLineEdit" name="lineAmt">
      <property name="geometry">
       <rect>
        <x>80</x>
@@ -195,7 +195,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="label_7">
+    <widget class="QLabel" name="lblMemo">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -208,7 +208,7 @@
       <string>Memo</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="cmboTfrFrom">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -218,7 +218,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="lblAmt">
      <property name="geometry">
       <rect>
        <x>10</x>

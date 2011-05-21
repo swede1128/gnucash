@@ -32,7 +32,6 @@
 #include "config.h"
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
-#include "dashboard.hpp"
 
 // gnucash includes
 #include <glib/gi18n.h>
@@ -88,8 +87,12 @@ MainWindow::MainWindow()
     createStatusBar();
     setIcons();
 
-    Dashboard *dboard = new Dashboard(this);
-    ui->tabWidget->addTab(dboard, tr("Dashboard"));
+    /** @todo Create persistent setting to switch between tab
+      * and independent window */
+    dboard = new Dashboard(this);
+    dboard->setWindowTitle("Dashboard");
+    //dboard->show();
+    ui->tabWidget->addTab(dboard, "Dashboard");
 
     readSettings();
 
@@ -98,6 +101,8 @@ MainWindow::MainWindow()
 
     setWindowIcon(QIcon(":/pixmaps/gnucash-icon-64x64.png"));
 
+    /* Check if the system supports freedesktop standards for icons,
+     * if not, then use the bundled icon set. */
     if (!QIcon::hasThemeIcon("document-open")) {
         QIcon::setThemeName("oxygen");
     }

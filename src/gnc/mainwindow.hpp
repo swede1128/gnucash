@@ -28,6 +28,7 @@
 #include <QSharedPointer>
 #include "gnc/Session.hpp"
 #include "gnc/AccountItemModel.hpp"
+#include "dashboard.hpp"
 
 class QAction;
 class QMenu;
@@ -124,6 +125,8 @@ private:
     QAction *m_actionRedo;
     QSharedPointer<RecentFileMenu> m_menuRecentFiles;
     QUndoStack *m_undoStack;
+
+    Dashboard *dboard;
 
     Session m_session;
     AccountListModel *m_accountListModel;
