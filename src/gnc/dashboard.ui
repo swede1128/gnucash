@@ -175,7 +175,7 @@
       <string>Transfer From</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="cmboTfrTo">
+    <widget class="QComboBox" name="cmboTransferTo">
      <property name="geometry">
       <rect>
        <x>210</x>
@@ -208,7 +208,7 @@
       <string>Memo</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="cmboTfrFrom">
+    <widget class="QComboBox" name="cmboTransferFrom">
      <property name="geometry">
       <rect>
        <x>10</x>

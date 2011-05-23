@@ -42,4 +42,12 @@ Dashboard::~Dashboard()
     delete ui;
 }
 
+void
+Dashboard::loadAccountsTreeComboBox()
+{
+    ui->cmboTransferFrom->setModel(this->m_accountTreeModel);
+    ui->cmboTransferTo->setModel(this->m_accountTreeModel);
+    qDebug() <<"Executed load tree in cmbo";
+}
+
 } // END namespace gnc
