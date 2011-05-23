@@ -94,10 +94,10 @@ MainWindow::MainWindow()
     //dboard->show();
     ui->tabWidget->addTab(dboard, "Dashboard");
 
-    /* Settings used by QSettings */
-    QCoreApplication::setOrganizationName("gnucash");
+    /* Properties used by QSettings */
+    QCoreApplication::setOrganizationName("Gnucash");
     QCoreApplication::setOrganizationDomain("gnucash.org");
-    QCoreApplication::setApplicationName("cutecash");
+    QCoreApplication::setApplicationName("Cutecash");
 
     readSettings();
 

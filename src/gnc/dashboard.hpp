@@ -22,6 +22,8 @@
 #ifndef DASHBOARD_HPP
 #define DASHBOARD_HPP
 
+#include "AccountItemModel.hpp"
+
 #include <QMainWindow>
 
 namespace Ui {
@@ -38,6 +40,9 @@ class Dashboard : public QMainWindow
 public:
     explicit Dashboard(QWidget *parent = 0);
     ~Dashboard();
+
+    AccountTreeModel *m_accountTreeModel;
+    void loadAccountsTreeComboBox();
 
 private:
     Ui::Dashboard *ui;
