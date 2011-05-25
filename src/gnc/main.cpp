@@ -23,7 +23,6 @@
  */
 #include "config.h"
 
-#include "TreeCombo.cpp"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -61,6 +60,7 @@ extern "C"
 
 #include <QApplication>
 #include "mainwindow.hpp"
+#include "TreeCombo.hpp"
 
 namespace gnc
 {

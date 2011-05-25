@@ -1,9 +1,8 @@
 #include <QtGui>
-
-class TreeComboBox : public QComboBox
+#include "TreeCombo.hpp"
+namespace gnc
 {
-public:
-        TreeComboBox(QWidget* parent = 0) : QComboBox(parent), skipNextHide(false)
+        TreeComboBox::TreeComboBox(QWidget* parent = 0)
         {
                 QTreeView* v = new QTreeView(this);
                 setView(v);
@@ -11,7 +10,7 @@ public:
                 v->viewport()->installEventFilter(this);
         }
 
-        bool eventFilter(QObject* object, QEvent* event)
+        bool TreeComboBox::eventFilter(QObject* object, QEvent* event)
         {
                 if (event->type() == QEvent::MouseButtonPress && object == view()->viewport())
                 {
@@ -23,13 +22,13 @@ public:
                 return false;
         }
 
-        virtual void showPopup()
+        void TreeComboBox::showPopup()
         {
                 setRootModelIndex(QModelIndex());
                 QComboBox::showPopup();
         }
 
-        virtual void hidePopup()
+        void TreeComboBox::hidePopup()
         {
                 setRootModelIndex(view()->currentIndex().parent());
                 setCurrentIndex(view()->currentIndex().row());
@@ -38,7 +37,4 @@ public:
                 else
                         QComboBox::hidePopup();
         }
-
-private:
-        bool skipNextHide;
-};
+}
