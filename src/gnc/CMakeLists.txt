@@ -29,6 +29,7 @@ SET (gnc_SOURCES
   mainwindow.cpp
   mainwindow-file.cpp
   dashboard.cpp
+  TreeCombo.cpp
 )
 
 SET (gnc_QOBJECT_HEADERS
@@ -39,6 +40,7 @@ SET (gnc_QOBJECT_HEADERS
   SplitListView.hpp
   mainwindow.hpp
   dashboard.hpp
+  TreeCombo.hpp
 )
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
   Account.hpp

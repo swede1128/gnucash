@@ -24,6 +24,7 @@
 
 #include "AccountItemModel.hpp"
 
+
 #include <QMainWindow>
 
 namespace Ui {

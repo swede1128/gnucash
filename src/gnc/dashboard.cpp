@@ -18,10 +18,14 @@
  * @file
  * Dashboard for embedding various dock widgets.
  */
-
+#include<QDockWidget>
+#include<QComboBox>
 #include "dashboard.hpp"
 #include "ui_dashboard.h"
+#include "TreeCombo.cpp"
 
+#include<QTreeView>
+#include<QEvent>
 namespace gnc
 {
 
@@ -45,8 +49,19 @@ Dashboard::~Dashboard()
 void
 Dashboard::loadAccountsTreeComboBox()
 {
-    ui->cmboTransferFrom->setModel(this->m_accountTreeModel);
-    ui->cmboTransferTo->setModel(this->m_accountTreeModel);
+    TreeComboBox * cmboTransferFrom = new TreeComboBox(ui->dockwBasicTxn);
+    cmboTransferFrom->move(10,80);
+    cmboTransferFrom->show();
+    cmboTransferFrom->setModel(this->m_accountTreeModel);
+    cmboTransferFrom->resize(190,25);
+
+    TreeComboBox * cmboTransferTo = new TreeComboBox(ui->dockwBasicTxn);
+    cmboTransferTo->move(210,80);
+    cmboTransferTo->show();
+    cmboTransferTo->setModel(this->m_accountTreeModel);
+    cmboTransferTo->resize(190,25);
+    cmboTransferFrom->lineEdit();
+
     qDebug() <<"Executed load tree in cmbo";
 }
 

@@ -23,6 +23,7 @@
  */
 #include "config.h"
 
+#include "TreeCombo.cpp"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
