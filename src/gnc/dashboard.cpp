@@ -22,7 +22,7 @@
 #include<QComboBox>
 #include "dashboard.hpp"
 #include "ui_dashboard.h"
-#include "TreeCombo.cpp"
+#include "TreeCombo.hpp"
 
 #include<QTreeView>
 #include<QEvent>
