@@ -25,7 +25,7 @@
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QDockWidget" name="txnEntryBasic">
+  <widget class="QDockWidget" name="dockwBasicTxn">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
@@ -33,12 +33,6 @@
     </sizepolicy>
    </property>
    <property name="minimumSize">
-    <size>
-     <width>425</width>
-     <height>260</height>
-    </size>
-   </property>
-   <property name="maximumSize">
     <size>
      <width>425</width>
      <height>260</height>
@@ -56,188 +50,13 @@
    <attribute name="dockWidgetArea">
     <number>4</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents">
-    <widget class="QLineEdit" name="lineDescription">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>0</y>
-       <width>331</width>
-       <height>23</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lblDescription">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>0</y>
-       <width>101</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Description</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lblDate">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>55</width>
-       <height>15</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Date</string>
-     </property>
-    </widget>
-    <widget class="QDateEdit" name="dateEdit">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>30</y>
-       <width>110</width>
-       <height>23</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btnCreateTxn">
-     <property name="geometry">
-      <rect>
-       <x>250</x>
-       <y>200</y>
-       <width>151</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Create Transaction</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineNum">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>170</y>
-       <width>331</width>
-       <height>23</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lblTfrTo">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>60</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Transfer To</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineMemo">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>140</y>
-       <width>331</width>
-       <height>23</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lblNum">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>170</y>
-       <width>55</width>
-       <height>15</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Num</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lblTfrFrom">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>60</y>
-       <width>101</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Transfer From</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="cmboTransferTo">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>80</y>
-       <width>201</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineAmt">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>110</y>
-       <width>331</width>
-       <height>23</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lblMemo">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>55</width>
-       <height>15</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Memo</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="cmboTransferFrom">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>191</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lblAmt">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>55</width>
-       <height>15</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Amount</string>
-     </property>
-    </widget>
-   </widget>
+   <widget class="QWidget" name="dockcBasicTxn"/>
   </widget>
-  <widget class="QDockWidget" name="txnEntrySplit">
+  <widget class="QDockWidget" name="dockwSplitTxn">
    <attribute name="dockWidgetArea">
     <number>4</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
+   <widget class="QWidget" name="dockcSplitTxn">
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
       <rect>
@@ -426,7 +245,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_3"/>
   </widget>
-  <widget class="QDockWidget" name="logViewer">
+  <widget class="QDockWidget" name="dockwLogViewer">
    <property name="minimumSize">
     <size>
      <width>100</width>
@@ -436,7 +255,7 @@
    <attribute name="dockWidgetArea">
     <number>4</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_5"/>
+   <widget class="QWidget" name="dockcLogViewer"/>
   </widget>
  </widget>
  <resources/>

@@ -538,7 +538,7 @@ void MainWindow::loadFile(const QString &fileName)
         m_accountTreeModel = new AccountTreeModel(root, this);
         ui->treeView->setModel(m_accountTreeModel);
         /* Load the tree in combo boxes of dashboard */
-        dboard->m_accountTreeModel = m_accountTreeModel;
+        dboard->m_accountListModel = m_accountListModel;
         dboard->loadAccountsTreeComboBox();
 
         ui->treeViewTab->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());

@@ -22,9 +22,22 @@
 #ifndef DASHBOARD_HPP
 #define DASHBOARD_HPP
 
+#include "config.h"
+
+extern "C"
+{
+#include "qof.h"
+#include "engine/Account.h"
+#include "engine/AccountP.h"
+#include "engine/Transaction.h"
+#include "engine/gnc-hooks.h"
+}
+
 #include "AccountItemModel.hpp"
 
 #include <QMainWindow>
+#include <QAbstractItemModel>
+#include <QtGui>
 
 namespace Ui {
     class Dashboard;
@@ -41,11 +54,45 @@ public:
     explicit Dashboard(QWidget *parent = 0);
     ~Dashboard();
 
-    AccountTreeModel *m_accountTreeModel;
+    AccountListModel *m_accountListModel;
     void loadAccountsTreeComboBox();
 
 private:
     Ui::Dashboard *ui;
+
+    /* UI widgets */
+    QGridLayout *gridBasicTxnEntry;
+    QHBoxLayout *hbox;
+    QVBoxLayout *vbox;
+    QLabel *lblDescription;
+    QLabel *lblDate;
+    QLabel *lblTransferFrom;
+    QLabel *lblTransferTo;
+    QLabel *lblAmount;
+    QLabel *lblMemo;
+    QLabel *lblNum;
+    QComboBox *comboTransferFrom;
+    QComboBox *comboTransferTo;
+    QLineEdit *lineDescription;
+    QLineEdit *lineAmount;
+    QLineEdit *lineMemo;
+    QLineEdit *lineNum;
+    QDateEdit *dateTxnDate;
+    QPushButton *btnCreateTxn;
+
+    /* Transaction related data types */
+    int index;
+    const Account *account;
+    QofBook *book;
+    Transaction *transaction;
+    Commodity *currency;
+    Split *split;
+
+    void setUiWidgets();
+    void setBasicTxnEntryFormLayout();
+
+private slots:
+    void on_btnCreateTxn_clicked();
 };
 
 } // END namespace gnc
