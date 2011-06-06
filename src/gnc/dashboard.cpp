@@ -19,16 +19,15 @@
  * Dashboard for embedding various dock widgets.
  */
 
-
 #include "dashboard.hpp"
 #include "ui_dashboard.h"
 
 #include <QtGui>
 #include <QAbstractItemModel>
+#include <QDate>
 
 namespace gnc
 {
-
 Dashboard::Dashboard(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Dashboard)
@@ -37,7 +36,6 @@ Dashboard::Dashboard(QWidget *parent) :
 
     /* Initialise */
     index = 0;
-    //$$$$$$$$accountName = accountName->gnc_book_get_root_account(get());
 
     /* Generate UI */
     setUiWidgets();
@@ -46,8 +44,8 @@ Dashboard::Dashboard(QWidget *parent) :
     this->tabifyDockWidget(ui->dockwBasicTxn, ui->dockwSplitTxn);
     ui->dockwBasicTxn->raise();
 
-    connect(btnCreateTxn, SIGNAL(clicked()),
-            this, SLOT(on_btnCreateTxn_clicked()));
+    connect(btnCreateBasicTxn, SIGNAL(clicked()),
+            this, SLOT(on_btnCreateBasicTxn_clicked()));
 }
 
 Dashboard::~Dashboard()
@@ -73,7 +71,7 @@ Dashboard::setUiWidgets()
     lineMemo        = new QLineEdit();
     lineNum         = new QLineEdit();
     dateTxnDate = new QDateEdit();
-    btnCreateTxn = new QPushButton(tr("Create Transaction"));
+    btnCreateBasicTxn = new QPushButton(tr("Create Transaction"));
 }
 
 /** Layout for data entry. Type: Form Based
@@ -106,7 +104,7 @@ Dashboard::setBasicTxnEntryFormLayout()
     gridBasicTxnEntry->addWidget(lblNum, 6, 0);
     gridBasicTxnEntry->addWidget(lineNum, 6, 1);
 
-    gridBasicTxnEntry->addWidget(btnCreateTxn, 7, 1);
+    gridBasicTxnEntry->addWidget(btnCreateBasicTxn, 7, 1);
 }
 
 void
@@ -120,30 +118,60 @@ Dashboard::loadAccountsTreeComboBox()
 
 /** Create Transaction button for Basic Transaction Entry dock widget */
 void
-Dashboard::on_btnCreateTxn_clicked()
+Dashboard::on_btnCreateBasicTxn_clicked()
 {
-    /* Allocate memory for a new transaction */
     index = comboTransferFrom->currentIndex();
     account = m_accountListModel->at(index);
     book = gnc_account_get_book(account);
     transaction = ::xaccMallocTransaction(book);
-
-    /*
     ::xaccTransBeginEdit(transaction);
 
-    ::xaccTransSetDatePostedSecs(transaction, 1234567);
-    ::xaccTransSetNum(transaction, "X23");
+    /* Allocate memory and start editing a new transaction */
+    index = comboTransferFrom->currentIndex();
+    account = m_accountListModel->at(index);
+    book = gnc_account_get_book(account);
+    transaction = ::xaccMallocTransaction(book);
+    ::xaccTransBeginEdit(transaction);
 
-    currency = ::xaccAccountGetCommodity(account);
+    /* Populate transaction details */
+    QDate datePosted = dateTxnDate->date();
+    ::xaccTransSetDate(transaction, datePosted.day(), datePosted.month(), datePosted.year());
+
+    //baNum = lineNum->text().toLocal8Bit();
+    //constNum = baNum.data();
+    //::xaccTransSetNum(transaction, constNum);
+    ::xaccTransSetNum(transaction, lineNum->text().toUtf8());
+    ::xaccTransSetDescription(transaction, lineDescription->text().toUtf8());
+
+    currency = xaccAccountGetCommodity(account);
     ::xaccTransSetCurrency(transaction, currency);
 
+    /* Populate split 1 */
     split = xaccMallocSplit(book);
-    xaccTransAppendSplit(transaction, split);
-    xaccAccountInsertSplit(account, split);
-    amount = gnc_numeric_create(123, 100);
-    xaccSplitSetValue(split, amount);
-    xaccSplitSetAmount(split, amount);
-    */
+    ::xaccTransAppendSplit(transaction, split);
+    ::xaccAccountInsertSplit(account, split);
+
+
+    //QIntValidator vldtAmount( amount, 100, this );
+    //vldtAmount.validate( amount, 0 );
+
+    amount = ::gnc_numeric_create(lineAmount->text().toInt(), 1);
+    ::xaccSplitSetValue(split, amount);
+    ::xaccSplitSetAmount(split, amount);
+
+    /* Populate split 2 */
+    split2 = ::xaccMallocSplit(book);
+    ::xaccTransAppendSplit(transaction, split2);
+    index2 = comboTransferTo->currentIndex();
+    account2 = m_accountListModel->at(index2);
+    ::xaccAccountInsertSplit(account2, split2);
+
+    intAmount2 = lineAmount->text().toInt();
+    amount2 = ::gnc_numeric_create(-intAmount2, 1);
+    ::xaccSplitSetValue(split2, amount2);
+    ::xaccSplitSetAmount(split2, amount2);
+
+    ::xaccTransCommitEdit(transaction);
 }
 
 } // END namespace gnc
