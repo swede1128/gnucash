@@ -17,6 +17,10 @@
 /**
  * @file
  * Dashboard for embedding various dock widgets.
+ *
+ * Dock Widgets:
+ * 1) Transfer Funds
+ * 2) First Person Overview
  */
 
 #include "dashboard.hpp"
@@ -34,15 +38,16 @@ Dashboard::Dashboard(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    /* Initialise */
+    // Initialise
     index = 0;
 
-    /* Generate UI */
+    // Generate UI
     setUiWidgets();
     setBasicTxnEntryFormLayout();
     setCentralWidget(ui->firstPersonOverview);
-    this->tabifyDockWidget(ui->dockwBasicTxn, ui->dockwSplitTxn);
-    ui->dockwBasicTxn->raise();
+    //this->tabifyDockWidget(ui->dockwBasicTxn, ui->dockwSplitTxn);
+    //ui->dockwBasicTxn->raise();
+    ui->dockwSplitTxn->hide();
 
     connect(btnCreateBasicTxn, SIGNAL(clicked()),
             this, SLOT(on_btnCreateBasicTxn_clicked()));
@@ -57,6 +62,9 @@ Dashboard::~Dashboard()
 void
 Dashboard::setUiWidgets()
 {
+    numer = 0.0;
+    numer2 = 0.0;
+
     lblDescription  = new QLabel(tr("Description:"));
     lblDate         = new QLabel(tr("Date:"));
     lblTransferFrom = new QLabel(tr("Transfer From:"));
@@ -65,12 +73,16 @@ Dashboard::setUiWidgets()
     lblMemo         = new QLabel(tr("Memo:"));
     lblNum          = new QLabel(tr("Num:"));
     comboTransferFrom = new QComboBox();
+    comboTransferFrom->addItem(tr("- NA -"));
     comboTransferTo   = new QComboBox();
+    comboTransferTo->addItem(tr("- NA -"));
     lineDescription = new QLineEdit();
     lineAmount      = new QLineEdit();
     lineMemo        = new QLineEdit();
     lineNum         = new QLineEdit();
     dateTxnDate = new QDateEdit();
+    dateVal = QDate::currentDate();
+    dateTxnDate->setDate(dateVal);
     btnCreateBasicTxn = new QPushButton(tr("Create Transaction"));
 }
 
@@ -116,61 +128,52 @@ Dashboard::loadAccountsTreeComboBox()
 
 /***** Slots *****/
 
-/** Create Transaction button for Basic Transaction Entry dock widget */
+/** "Create Transaction" button for Basic Transaction Entry dock widget */
 void
 Dashboard::on_btnCreateBasicTxn_clicked()
 {
+    // Allocate memory and start editing a new transaction
     index = comboTransferFrom->currentIndex();
     account = m_accountListModel->at(index);
     book = gnc_account_get_book(account);
     transaction = ::xaccMallocTransaction(book);
     ::xaccTransBeginEdit(transaction);
 
-    /* Allocate memory and start editing a new transaction */
-    index = comboTransferFrom->currentIndex();
-    account = m_accountListModel->at(index);
-    book = gnc_account_get_book(account);
-    transaction = ::xaccMallocTransaction(book);
-    ::xaccTransBeginEdit(transaction);
+    // Populate transaction details
+    dateVal = dateTxnDate->date();
+    ::xaccTransSetDate(transaction, dateVal.day(), dateVal.month(), dateVal.year());
 
-    /* Populate transaction details */
-    QDate datePosted = dateTxnDate->date();
-    ::xaccTransSetDate(transaction, datePosted.day(), datePosted.month(), datePosted.year());
-
-    //baNum = lineNum->text().toLocal8Bit();
-    //constNum = baNum.data();
-    //::xaccTransSetNum(transaction, constNum);
     ::xaccTransSetNum(transaction, lineNum->text().toUtf8());
     ::xaccTransSetDescription(transaction, lineDescription->text().toUtf8());
 
     currency = xaccAccountGetCommodity(account);
     ::xaccTransSetCurrency(transaction, currency);
 
-    /* Populate split 1 */
+    denom = ::gnc_commodity_get_fraction(currency);
+
+    // Populate split 1
     split = xaccMallocSplit(book);
     ::xaccTransAppendSplit(transaction, split);
     ::xaccAccountInsertSplit(account, split);
 
-
-    //QIntValidator vldtAmount( amount, 100, this );
-    //vldtAmount.validate( amount, 0 );
-
-    amount = ::gnc_numeric_create(lineAmount->text().toInt(), 1);
+    numer = lineAmount->text().toDouble();
+    amount = ::double_to_gnc_numeric(numer, denom, GNC_HOW_DENOM_REDUCE);
     ::xaccSplitSetValue(split, amount);
     ::xaccSplitSetAmount(split, amount);
 
-    /* Populate split 2 */
+    // Populate split 2
     split2 = ::xaccMallocSplit(book);
     ::xaccTransAppendSplit(transaction, split2);
     index2 = comboTransferTo->currentIndex();
     account2 = m_accountListModel->at(index2);
     ::xaccAccountInsertSplit(account2, split2);
 
-    intAmount2 = lineAmount->text().toInt();
-    amount2 = ::gnc_numeric_create(-intAmount2, 1);
+    numer2 = (lineAmount->text().toDouble()) * (-1);
+    amount2 = ::double_to_gnc_numeric(numer2, denom, GNC_HOW_DENOM_REDUCE);
     ::xaccSplitSetValue(split2, amount2);
     ::xaccSplitSetAmount(split2, amount2);
 
+    // Finally commit the transaction to storage backend.
     ::xaccTransCommitEdit(transaction);
 }
 

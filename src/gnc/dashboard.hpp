@@ -29,7 +29,6 @@ extern "C"
 #include "qof.h"
 #include "engine/Account.h"
 #include "engine/Transaction.h"
-//#include "engine/gnc-hooks.h"
 }
 
 #include "AccountItemModel.hpp"
@@ -56,8 +55,6 @@ public:
     AccountListModel *m_accountListModel;
     void loadAccountsTreeComboBox();
 
-    //QDate getDatePosted() const { return dateTxnDate; }
-
 private:
     Ui::Dashboard *ui;
 
@@ -79,26 +76,25 @@ private:
     QLineEdit *lineMemo;
     QLineEdit *lineNum;
     QDateEdit *dateTxnDate;
+    QDate dateVal;
     QPushButton *btnCreateBasicTxn;
 
     /* Transaction related data types */    
     ::QofBook *book;
     ::Transaction *transaction;
     ::gnc_commodity *currency;
-
-    /* For conversion of QString to char */
-    //QByteArray baNum;
-    //const char *constNum;
+    int denom;
 
     int index;
     ::Account *account;
     ::Split *split;
+    double numer;
     ::gnc_numeric amount;
 
     int index2;
     ::Account *account2;
     ::Split *split2;
-    int intAmount2;
+    double numer2;
     ::gnc_numeric amount2;
 
     void setUiWidgets();
