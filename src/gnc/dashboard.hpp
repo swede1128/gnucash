@@ -94,7 +94,6 @@ private:
     int index2;
     ::Account *account2;
     ::Split *split2;
-    double numer2;
     ::gnc_numeric amount2;
 
     void setUiWidgets();

@@ -63,7 +63,6 @@ void
 Dashboard::setUiWidgets()
 {
     numer = 0.0;
-    numer2 = 0.0;
 
     lblDescription  = new QLabel(tr("Description:"));
     lblDate         = new QLabel(tr("Date:"));
@@ -78,6 +77,8 @@ Dashboard::setUiWidgets()
     comboTransferTo->addItem(tr("- NA -"));
     lineDescription = new QLineEdit();
     lineAmount      = new QLineEdit();
+    lineAmount->setText(tr("0.00"));
+    lineAmount->setValidator(new QDoubleValidator(0.0, 100000000000.0, 2, this));
     lineMemo        = new QLineEdit();
     lineNum         = new QLineEdit();
     dateTxnDate = new QDateEdit();
@@ -141,7 +142,8 @@ Dashboard::on_btnCreateBasicTxn_clicked()
 
     // Populate transaction details
     dateVal = dateTxnDate->date();
-    ::xaccTransSetDate(transaction, dateVal.day(), dateVal.month(), dateVal.year());
+    ::xaccTransSetDate(transaction, dateVal.day(), dateVal.month(),
+                       dateVal.year());
 
     ::xaccTransSetNum(transaction, lineNum->text().toUtf8());
     ::xaccTransSetDescription(transaction, lineDescription->text().toUtf8());
@@ -157,7 +159,8 @@ Dashboard::on_btnCreateBasicTxn_clicked()
     ::xaccAccountInsertSplit(account, split);
 
     numer = lineAmount->text().toDouble();
-    amount = ::double_to_gnc_numeric(numer, denom, GNC_HOW_DENOM_REDUCE);
+    amount = ::double_to_gnc_numeric(numer, denom,
+                                     GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_NEVER);
     ::xaccSplitSetValue(split, amount);
     ::xaccSplitSetAmount(split, amount);
 
@@ -168,8 +171,7 @@ Dashboard::on_btnCreateBasicTxn_clicked()
     account2 = m_accountListModel->at(index2);
     ::xaccAccountInsertSplit(account2, split2);
 
-    numer2 = (lineAmount->text().toDouble()) * (-1);
-    amount2 = ::double_to_gnc_numeric(numer2, denom, GNC_HOW_DENOM_REDUCE);
+    amount2 = ::gnc_numeric_neg(amount);
     ::xaccSplitSetValue(split2, amount2);
     ::xaccSplitSetAmount(split2, amount2);
 
