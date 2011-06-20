@@ -85,19 +85,18 @@ private:
     ::gnc_commodity *currency;
     int denom;
 
-    int index;
     ::Account *account;
     ::Split *split;
     double numer;
     ::gnc_numeric amount;
 
-    int index2;
     ::Account *account2;
     ::Split *split2;
     ::gnc_numeric amount2;
 
     void setUiWidgets();
     void setBasicTxnEntryFormLayout();
+    void clearFields();
 
 private slots:
     void on_btnCreateBasicTxn_clicked();

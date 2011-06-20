@@ -38,9 +38,6 @@ Dashboard::Dashboard(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // Initialise
-    index = 0;
-
     // Generate UI
     setUiWidgets();
     setBasicTxnEntryFormLayout();
@@ -127,14 +124,31 @@ Dashboard::loadAccountsTreeComboBox()
     comboTransferTo->setModel(m_accountListModel);
 }
 
+void
+Dashboard::clearFields()
+{
+    lineDescription->clear();
+    lineAmount->clear();
+    lineMemo->clear();
+    lineNum->clear();
+}
+
 /***** Slots *****/
 
 /** "Create Transaction" button for Basic Transaction Entry dock widget */
 void
 Dashboard::on_btnCreateBasicTxn_clicked()
 {
+    if(lineDescription->text().isEmpty())
+    {
+        QMessageBox::StandardButton warnEmptyDesc;
+        warnEmptyDesc = QMessageBox::warning(this, tr("Empty Description"), "You have not set a description. Are you sure you want to create a transaction with no description?", QMessageBox::Yes | QMessageBox::No);
+        if(warnEmptyDesc == QMessageBox::No)
+            return;
+    }
+
     // Allocate memory and start editing a new transaction
-    index = comboTransferFrom->currentIndex();
+    int index = comboTransferFrom->currentIndex();
     account = m_accountListModel->at(index);
     book = gnc_account_get_book(account);
     transaction = ::xaccMallocTransaction(book);
@@ -167,7 +181,7 @@ Dashboard::on_btnCreateBasicTxn_clicked()
     // Populate split 2
     split2 = ::xaccMallocSplit(book);
     ::xaccTransAppendSplit(transaction, split2);
-    index2 = comboTransferTo->currentIndex();
+    int index2 = comboTransferTo->currentIndex();
     account2 = m_accountListModel->at(index2);
     ::xaccAccountInsertSplit(account2, split2);
 
@@ -177,6 +191,9 @@ Dashboard::on_btnCreateBasicTxn_clicked()
 
     // Finally commit the transaction to storage backend.
     ::xaccTransCommitEdit(transaction);
+
+    statusBar()->showMessage(tr("Transaction has been created"));
+    clearFields();
 }
 
 } // END namespace gnc
