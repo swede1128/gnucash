@@ -139,11 +139,11 @@ Dashboard::clearFields()
 void
 Dashboard::on_btnCreateBasicTxn_clicked()
 {
-    if(lineDescription->text().isEmpty())
+    if (lineDescription->text().isEmpty())
     {
         QMessageBox::StandardButton warnEmptyDesc;
         warnEmptyDesc = QMessageBox::warning(this, tr("Empty Description"), "You have not set a description. Are you sure you want to create a transaction with no description?", QMessageBox::Yes | QMessageBox::No);
-        if(warnEmptyDesc == QMessageBox::No)
+        if (warnEmptyDesc == QMessageBox::No)
             return;
     }
 
@@ -168,6 +168,10 @@ Dashboard::on_btnCreateBasicTxn_clicked()
     denom = ::gnc_commodity_get_fraction(currency);
 
     // Populate split 1
+    // Check whether the account for this split is a placeholder
+    qDebug() << ::xaccAccountGetPlaceholder(account);
+    // ^^ does not work as expected, returns false for placeholder accounts too. Why?
+
     split = xaccMallocSplit(book);
     ::xaccTransAppendSplit(transaction, split);
     ::xaccAccountInsertSplit(account, split);
