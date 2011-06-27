@@ -88,6 +88,8 @@ private:
 
     QGroupBox *unifiedColCell;
 
+    GList *acctChildrenList;
+
     /* Transaction related data types */
     ::QofBook *book;
     ::Transaction *transaction;

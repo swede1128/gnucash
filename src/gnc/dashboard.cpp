@@ -226,6 +226,9 @@ Dashboard::on_btnSelectAccount_clicked()
     //SplitList *gSplitList = new SplitList;
     //gSplitList = xaccAccountGetSplitList(selectedAccount);
 
+    acctChildrenList = new GList;
+    acctChildrenList = ::gnc_account_get_children(selectedAccount);
+
     //unifiedColCell GroupBox Manipulations
 
     /*int rowNum=2;
