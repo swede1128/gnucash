@@ -79,7 +79,16 @@ private:
     QDate dateVal;
     QPushButton *btnCreateBasicTxn;
 
-    /* Transaction related data types */    
+    /* FPO widgets */
+    QGridLayout *gridFPO;
+    QPushButton *btnSelectAccount;
+    QComboBox *comboAccountsList;
+    ::Account *selectedAccount;
+    int selectedAccountIndex;
+
+    QGroupBox *unifiedColCell;
+
+    /* Transaction related data types */
     ::QofBook *book;
     ::Transaction *transaction;
     ::gnc_commodity *currency;
@@ -96,10 +105,13 @@ private:
 
     void setUiWidgets();
     void setBasicTxnEntryFormLayout();
+    void setFPO();
     void clearFields();
 
 private slots:
     void on_btnCreateBasicTxn_clicked();
+    void on_btnSelectAccount_clicked();
+
 };
 
 } // END namespace gnc

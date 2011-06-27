@@ -41,13 +41,16 @@ Dashboard::Dashboard(QWidget *parent) :
     // Generate UI
     setUiWidgets();
     setBasicTxnEntryFormLayout();
-    setCentralWidget(ui->firstPersonOverview);
+    setCentralWidget(ui->dockwFPO);
+    setFPO();
     //this->tabifyDockWidget(ui->dockwBasicTxn, ui->dockwSplitTxn);
     //ui->dockwBasicTxn->raise();
     ui->dockwSplitTxn->hide();
 
     connect(btnCreateBasicTxn, SIGNAL(clicked()),
             this, SLOT(on_btnCreateBasicTxn_clicked()));
+    connect(btnSelectAccount, SIGNAL(clicked()),
+            this, SLOT(on_btnSelectAccount_clicked()));
 }
 
 Dashboard::~Dashboard()
@@ -118,10 +121,22 @@ Dashboard::setBasicTxnEntryFormLayout()
 }
 
 void
+Dashboard::setFPO()
+{
+    comboAccountsList = new QComboBox();
+    btnSelectAccount = new QPushButton(tr("Select Account"));
+
+    gridFPO = new QGridLayout(ui->dockcFPO);
+    gridFPO->addWidget(comboAccountsList, 0, 0);
+    gridFPO->addWidget(btnSelectAccount, 1, 0);
+}
+
+void
 Dashboard::loadAccountsTreeComboBox()
 {
     comboTransferFrom->setModel(m_accountListModel);
     comboTransferTo->setModel(m_accountListModel);
+    comboAccountsList->setModel(m_accountListModel);
 }
 
 void
@@ -196,8 +211,29 @@ Dashboard::on_btnCreateBasicTxn_clicked()
     // Finally commit the transaction to storage backend.
     ::xaccTransCommitEdit(transaction);
 
-    statusBar()->showMessage(tr("Transaction has been created"));
+    statusBar()->showMessage(tr("Transaction has been created"), 2000);
     clearFields();
+}
+
+void
+Dashboard::on_btnSelectAccount_clicked()
+{
+    selectedAccountIndex = comboAccountsList->currentIndex();
+    selectedAccount = m_accountListModel->at(selectedAccountIndex);
+
+    qDebug()<<::xaccAccountGetName(selectedAccount);
+
+    //SplitList *gSplitList = new SplitList;
+    //gSplitList = xaccAccountGetSplitList(selectedAccount);
+
+    //unifiedColCell GroupBox Manipulations
+
+    /*int rowNum=2;
+    foreach(unifiedColCell in gSplitList)
+    {
+        gridFPO->addWidget(unifiedColCell, rowNum, 0);
+        rowNum++;
+    }*/
 }
 
 } // END namespace gnc

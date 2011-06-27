@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>1049</width>
-     <height>21</height>
+     <height>28</height>
     </rect>
    </property>
   </widget>
@@ -236,14 +236,14 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="firstPersonOverview">
+  <widget class="QDockWidget" name="dockwFPO">
    <property name="enabled">
     <bool>true</bool>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_3"/>
+   <widget class="QWidget" name="dockcFPO"/>
   </widget>
   <widget class="QDockWidget" name="dockwLogViewer">
    <property name="minimumSize">
