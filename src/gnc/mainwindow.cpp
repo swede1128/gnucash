@@ -99,7 +99,7 @@ MainWindow::MainWindow()
     QCoreApplication::setOrganizationDomain("gnucash.org");
     QCoreApplication::setApplicationName("Cutecash");
 
-    readSettings();
+    readSettings();    
 
     connect(m_undoStack, SIGNAL(cleanChanged(bool)),
             this, SLOT(documentCleanStateChanged(bool)));
@@ -114,6 +114,8 @@ MainWindow::MainWindow()
 
     newFile();
     setUnifiedTitleAndToolBarOnMac(true);
+
+    autoLoadRecentFile();
 }
 
 MainWindow::~MainWindow()
@@ -290,6 +292,18 @@ void MainWindow::readSettings()
     resize(size);
     move(pos);
     m_menuRecentFiles->readSettings(&settings, "RecentFiles");
+}
+
+void MainWindow::autoLoadRecentFile()
+{
+    QSettings settings;
+    QString lastOpenedFile = "";
+    lastOpenedFile = m_menuRecentFiles->getRecentFileName(&settings,
+                                                          "RecentFiles");
+    if(maybeSave())
+    {
+        loadFile(lastOpenedFile);
+    }
 }
 
 void MainWindow::writeSettings()

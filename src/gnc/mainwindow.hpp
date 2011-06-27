@@ -93,7 +93,8 @@ private:
     void createToolBars();
     void createStatusBar();
     void setIcons();
-    void readSettings();
+    void readSettings();    
+    void autoLoadRecentFile();
     void writeSettings();
     bool maybeSave();
     void setCurrentFile(const QString &fileName);
