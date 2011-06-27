@@ -224,7 +224,7 @@ Dashboard::on_btnSelectAccount_clicked()
     qDebug()<<::xaccAccountGetName(selectedAccount);
 
     gSplitList = new SplitList;
-    gSplitList = xaccAccountGetSplitList(selectedAccount);
+    gSplitList = ::xaccAccountGetSplitList(selectedAccount);
 
     //acctChildrenList = new GList;
     //acctChildrenList = ::gnc_account_get_children(selectedAccount);
