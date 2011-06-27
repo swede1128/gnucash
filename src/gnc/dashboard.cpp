@@ -223,11 +223,11 @@ Dashboard::on_btnSelectAccount_clicked()
 
     qDebug()<<::xaccAccountGetName(selectedAccount);
 
-    //SplitList *gSplitList = new SplitList;
-    //gSplitList = xaccAccountGetSplitList(selectedAccount);
+    gSplitList = new SplitList;
+    gSplitList = xaccAccountGetSplitList(selectedAccount);
 
-    acctChildrenList = new GList;
-    acctChildrenList = ::gnc_account_get_children(selectedAccount);
+    //acctChildrenList = new GList;
+    //acctChildrenList = ::gnc_account_get_children(selectedAccount);
 
     //unifiedColCell GroupBox Manipulations
 

@@ -81,6 +81,7 @@ private:
 
     /* FPO widgets */
     QGridLayout *gridFPO;
+    SplitList *gSplitList;
     QPushButton *btnSelectAccount;
     QComboBox *comboAccountsList;
     ::Account *selectedAccount;
