@@ -32,6 +32,7 @@ extern "C"
 }
 
 #include "AccountItemModel.hpp"
+#include "fpo/FPO.hpp"
 
 #include <QMainWindow>
 #include <QAbstractItemModel>
@@ -44,6 +45,8 @@ namespace Ui {
 namespace gnc
 {
 
+class FPO;
+
 class Dashboard : public QMainWindow
 {
     Q_OBJECT
@@ -52,8 +55,9 @@ public:
     explicit Dashboard(QWidget *parent = 0);
     ~Dashboard();
 
-    AccountListModel *m_accountListModel;
-    void loadAccountsTreeComboBox();
+    FPO *fpoWidget;
+    AccountListModel *accountsList;
+    void loadAccountsTreeComboBox(AccountListModel * const m_accountListModel);
 
 private:
     Ui::Dashboard *ui;
@@ -78,18 +82,6 @@ private:
     QDateEdit *dateTxnDate;
     QDate dateVal;
     QPushButton *btnCreateBasicTxn;
-
-    /* FPO widgets */
-    QGridLayout *gridFPO;
-    SplitList *gSplitList;
-    QPushButton *btnSelectAccount;
-    QComboBox *comboAccountsList;
-    ::Account *selectedAccount;
-    int selectedAccountIndex;
-
-    QGroupBox *unifiedColCell;
-
-    GList *acctChildrenList;
 
     /* Transaction related data types */
     ::QofBook *book;

@@ -19,7 +19,6 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -28,7 +27,7 @@
 #include <QSharedPointer>
 #include "gnc/Session.hpp"
 #include "gnc/AccountItemModel.hpp"
-#include "dashboard.hpp"
+#include "gnc/dashboard.hpp"
 
 class QAction;
 class QMenu;
@@ -46,6 +45,7 @@ namespace gnc
 {
 
 class RecentFileMenu;
+class Dashboard;
 
 /** The main window of Cutecash.
  *

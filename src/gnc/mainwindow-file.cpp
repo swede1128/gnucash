@@ -53,6 +53,9 @@ extern "C"
 #include "gnc/SplitListModel.hpp"
 #include "gnc/RecentFileMenu.hpp"
 
+/* Temp solution for accounts list */
+#include "gnc/fpo/ViewletView.hpp"
+
 #include "gnc/Cmd.hpp"
 
 namespace gnc
@@ -538,11 +541,11 @@ void MainWindow::loadFile(const QString &fileName)
         m_accountTreeModel = new AccountTreeModel(root, this);
         ui->treeView->setModel(m_accountTreeModel);
         /* Load the tree in combo boxes of dashboard */
-        dboard->m_accountListModel = m_accountListModel;
-        dboard->loadAccountsTreeComboBox();
+        dboard->loadAccountsTreeComboBox(m_accountListModel);
+        dboard->fpoWidget->oneViewlet->loadAccountsTreeComboBox(m_accountListModel);
 
         ui->treeViewTab->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());
-        ui->tabWidget->setCurrentWidget(ui->treeViewTab);
+        ui->tabWidget->setCurrentWidget(dboard);
     }
     else
     {

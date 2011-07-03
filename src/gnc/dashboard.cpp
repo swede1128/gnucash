@@ -49,8 +49,6 @@ Dashboard::Dashboard(QWidget *parent) :
 
     connect(btnCreateBasicTxn, SIGNAL(clicked()),
             this, SLOT(on_btnCreateBasicTxn_clicked()));
-    connect(btnSelectAccount, SIGNAL(clicked()),
-            this, SLOT(on_btnSelectAccount_clicked()));
 }
 
 Dashboard::~Dashboard()
@@ -123,20 +121,11 @@ Dashboard::setBasicTxnEntryFormLayout()
 void
 Dashboard::setFPO()
 {
-    comboAccountsList = new QComboBox();
-    btnSelectAccount = new QPushButton(tr("Select Account"));
-
-    gridFPO = new QGridLayout(ui->dockcFPO);
-    gridFPO->addWidget(comboAccountsList, 0, 0);
-    gridFPO->addWidget(btnSelectAccount, 1, 0);
-}
-
-void
-Dashboard::loadAccountsTreeComboBox()
-{
-    comboTransferFrom->setModel(m_accountListModel);
-    comboTransferTo->setModel(m_accountListModel);
-    comboAccountsList->setModel(m_accountListModel);
+    QVBoxLayout *FPOLayout = new QVBoxLayout;
+    ui->dockwFPO->setLayout(FPOLayout);
+    fpoWidget = new FPO(ui->dockcFPO);
+    /* ui->dockwFPO->setAllowedAreas(Qt::LeftDockWidgetArea
+                                  | Qt::RightDockWidgetArea);*/
 }
 
 void
@@ -146,6 +135,14 @@ Dashboard::clearFields()
     lineAmount->clear();
     lineMemo->clear();
     lineNum->clear();
+}
+
+void
+Dashboard::loadAccountsTreeComboBox(AccountListModel * const m_accountsListModel)
+{
+    accountsList = m_accountsListModel;
+    comboTransferFrom->setModel(accountsList);
+    comboTransferTo->setModel(accountsList);
 }
 
 /***** Slots *****/
@@ -164,7 +161,7 @@ Dashboard::on_btnCreateBasicTxn_clicked()
 
     // Allocate memory and start editing a new transaction
     int index = comboTransferFrom->currentIndex();
-    account = m_accountListModel->at(index);
+    account = accountsList->at(index);
     book = gnc_account_get_book(account);
     transaction = ::xaccMallocTransaction(book);
     ::xaccTransBeginEdit(transaction);
@@ -201,7 +198,7 @@ Dashboard::on_btnCreateBasicTxn_clicked()
     split2 = ::xaccMallocSplit(book);
     ::xaccTransAppendSplit(transaction, split2);
     int index2 = comboTransferTo->currentIndex();
-    account2 = m_accountListModel->at(index2);
+    account2 = accountsList->at(index2);
     ::xaccAccountInsertSplit(account2, split2);
 
     amount2 = ::gnc_numeric_neg(amount);
@@ -213,30 +210,6 @@ Dashboard::on_btnCreateBasicTxn_clicked()
 
     statusBar()->showMessage(tr("Transaction has been created"), 2000);
     clearFields();
-}
-
-void
-Dashboard::on_btnSelectAccount_clicked()
-{
-    selectedAccountIndex = comboAccountsList->currentIndex();
-    selectedAccount = m_accountListModel->at(selectedAccountIndex);
-
-    qDebug()<<::xaccAccountGetName(selectedAccount);
-
-    gSplitList = new SplitList;
-    gSplitList = ::xaccAccountGetSplitList(selectedAccount);
-
-    //acctChildrenList = new GList;
-    //acctChildrenList = ::gnc_account_get_children(selectedAccount);
-
-    //unifiedColCell GroupBox Manipulations
-
-    /*int rowNum=2;
-    foreach(unifiedColCell in gSplitList)
-    {
-        gridFPO->addWidget(unifiedColCell, rowNum, 0);
-        rowNum++;
-    }*/
 }
 
 } // END namespace gnc
