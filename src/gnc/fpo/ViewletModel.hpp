@@ -25,6 +25,20 @@ public:
         return (QString const) ::xaccSplitGetCorrAccountName(split); }
     QString getReconciliationStatus(::Split * split) {
         return (QString const) ::xaccSplitGetReconcile(split); }
+    QDate getDatePosted(::Split * split) {
+        ::Transaction *txn = xaccSplitGetParent(split);
+        return toQDate(::xaccTransGetDatePostedGDate(txn)); }
+    inline QDate toQDate(const ::GDate& d)
+    {
+        if (g_date_valid(&d))
+            return QDate(g_date_year(&d), g_date_month(&d), g_date_day(&d));
+        else
+            return QDate();
+    }
+    QString getDescription(::Split * split) {
+        ::Transaction *txn = xaccSplitGetParent(split);
+        return (QString const) xaccTransGetDescription(txn); }
+
 };
 
 } // END namespace gnc

@@ -28,19 +28,14 @@ ViewletView::setViewlet(QWidget *parent, QVBoxLayout *FPOLayout)
 
     /* 2) The actual viewlet display of account(s) data */
     viewletDisplay = new QWidget();
-    //viewletDisplay = new QWidget(viewletScrollArea);
     viewletDisplayLayout = new QVBoxLayout();
-    QSizeGrip * grip = new QSizeGrip(viewletDisplay);
     viewletScrollArea = new QScrollArea();
 
     viewletScrollArea->setWidget(viewletDisplay);
     viewletScrollArea->setAlignment(Qt::AlignLeft);
     viewletScrollArea->setWidgetResizable(true);
-    viewletScrollArea->setBackgroundRole(QPalette::Dark);
-
     viewletDisplay->setLayout(viewletDisplayLayout);
-    //viewletScrollArea->setMinimumSize(100, 100);
-    //viewletScrollArea->setMaximumWidth(400);
+    FPOLayout->addWidget(viewletScrollArea);
 
     /*
     // test scroll area
@@ -51,13 +46,6 @@ ViewletView::setViewlet(QWidget *parent, QVBoxLayout *FPOLayout)
         viewletDisplayLayout->addWidget(newrecon);
     }
     */
-
-    //
-    //viewletDisplayLayout->addWidget(viewletDisplay);
-    //viewletDisplayLayout->addWidget(viewletScrollArea);
-    //FPOLayout->addWidget(viewletDisplay);
-    FPOLayout->addWidget(viewletScrollArea);
-
 }
 
 void
@@ -87,16 +75,22 @@ ViewletView::on_btnSelectAccount_clicked()
         //oneSplit = (Split *)newSplits.at(i);
         //oneSplit->getMemo();
 
+        QDateEdit * editSplitDate = new QDateEdit();
+        editSplitDate->setDate(viewletModel->getDatePosted(split));
+        viewletDisplayLayout->addWidget(editSplitDate);
 
-        QLineEdit * editAccountName = new QLineEdit(
+        QLabel * editAccountName = new QLabel(
                     viewletModel->getAccountName(split));
         viewletDisplayLayout->addWidget(editAccountName);
+
+        QLabel * editDescription = new QLabel("~    Description: "+
+                    viewletModel->getDescription(split));
+        viewletDisplayLayout->addWidget(editDescription);
+
 
         /*QLineEdit * editReconcileStatus = new QLineEdit(
                     viewletModel->getReconciliationStatus(split));
         viewletDisplayLayout->addWidget(editReconcileStatus);*/
-
-
     }
 }
 
