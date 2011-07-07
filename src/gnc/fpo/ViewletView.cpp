@@ -55,7 +55,7 @@ ViewletView::setViewlet(QWidget *parent, QVBoxLayout *FPOLayout)
     //
     //viewletDisplayLayout->addWidget(viewletDisplay);
     //viewletDisplayLayout->addWidget(viewletScrollArea);
-    FPOLayout->addWidget(viewletDisplay);
+    //FPOLayout->addWidget(viewletDisplay);
     FPOLayout->addWidget(viewletScrollArea);
 
 }
@@ -75,7 +75,6 @@ ViewletView::on_btnSelectAccount_clicked()
     selectedAccountIndex = comboAccountsList->currentIndex();
     selectedAccount = accountsList->at(selectedAccountIndex);
 
-    qDebug()<<"~ Account \t"<<::xaccAccountGetName(selectedAccount);
     pSplitList = ::xaccAccountGetSplitList(selectedAccount);
 
     SplitQList newSplits = Split::fromGList(pSplitList);
@@ -99,14 +98,6 @@ ViewletView::on_btnSelectAccount_clicked()
 
 
     }
-    //unifiedColCell GroupBox Manipulations
-
-    /*int rowNum=2;
-    foreach(unifiedColCell in gSplitList)
-    {
-        gridFPO->addWidget(unifiedColCell, rowNum, 0);
-        rowNum++;
-    }*/
 }
 
 } // END namespace gnc
