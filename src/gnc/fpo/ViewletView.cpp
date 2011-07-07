@@ -10,8 +10,8 @@ ViewletView::ViewletView(QWidget *parent, QVBoxLayout *FPOlayout) :
 
     viewletModel = new ViewletModel();
 
-    connect(btnSelectAccount, SIGNAL(clicked()),
-            this, SLOT(on_btnSelectAccount_clicked()));
+    connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(createViewlet()));
 }
 
 void
@@ -20,11 +20,9 @@ ViewletView::setViewlet(QWidget *parent, QVBoxLayout *FPOLayout)
     /* Initialize widgets to defaults */
     comboAccountsList = new QComboBox();
     comboAccountsList->addItem(tr("-NA-"));
-    btnSelectAccount = new QPushButton(tr("Select Account"));
 
     /* 1) Account selection feature of the viewlet */
     FPOLayout->addWidget(comboAccountsList);
-    FPOLayout->addWidget(btnSelectAccount);
 
     /* 2) The actual viewlet display of account(s) data */
     viewletDisplay = new QWidget();
@@ -36,16 +34,6 @@ ViewletView::setViewlet(QWidget *parent, QVBoxLayout *FPOLayout)
     viewletScrollArea->setWidgetResizable(true);
     viewletDisplay->setLayout(viewletDisplayLayout);
     FPOLayout->addWidget(viewletScrollArea);
-
-    /*
-    // test scroll area
-    for(int i=0; i<50; i++)
-    {
-        QLabel *newrecon = new QLabel("Hello", viewletDisplay);
-        //newrecon->setFixedSize(100, 100);
-        viewletDisplayLayout->addWidget(newrecon);
-    }
-    */
 }
 
 void
@@ -58,7 +46,7 @@ ViewletView::loadAccountsTreeComboBox(AccountListModel * const m_accountsListMod
 /***** Slots *****/
 
 void
-ViewletView::on_btnSelectAccount_clicked()
+ViewletView::createViewlet()
 {
     selectedAccountIndex = comboAccountsList->currentIndex();
     selectedAccount = accountsList->at(selectedAccountIndex);

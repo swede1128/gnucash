@@ -41,7 +41,6 @@ private:
     AccountListModel *accountsList;
 
     /* UI Widgets */
-    QPushButton *btnSelectAccount;
     QComboBox *comboAccountsList;
 
     ViewletModel *viewletModel;
@@ -68,7 +67,7 @@ private:
     void setViewlet(QWidget *parent, QVBoxLayout *FPOLayout);
 
 private slots:
-    void on_btnSelectAccount_clicked();
+    void createViewlet();
 };
 
 } // END namespace gnc
