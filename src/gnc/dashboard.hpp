@@ -105,7 +105,6 @@ private:
 
 private slots:
     void on_btnCreateBasicTxn_clicked();
-    void on_btnSelectAccount_clicked();
 
 };
 

@@ -7,11 +7,11 @@
 namespace gnc
 {
 
-FPO::FPO(QWidget *parent) :
+FPO::FPO(QWidget *parent, QVBoxLayout *FPOLayout) :
     QWidget(parent)
 {
     /* For now, create one viewlet; hardcoded. */
-    oneViewlet = new ViewletView(parent);
+    oneViewlet = new ViewletView(parent, FPOLayout);
 }
 
 } // END namespace gnc

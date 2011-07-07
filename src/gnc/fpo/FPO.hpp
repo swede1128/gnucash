@@ -15,7 +15,7 @@ class FPO : public QWidget
 {
     Q_OBJECT
 public:
-    explicit FPO(QWidget *parent = 0);
+    explicit FPO(QWidget *parent = 0, QVBoxLayout *FPOLayout = NULL);
     ViewletView *oneViewlet;
 
 signals:

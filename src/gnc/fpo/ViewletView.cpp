@@ -3,40 +3,61 @@
 namespace gnc
 {
 
-ViewletView::ViewletView(QWidget *parent) :
+ViewletView::ViewletView(QWidget *parent, QVBoxLayout *FPOlayout) :
     QWidget(parent)
 {
-    setViewlet(parent);
+    setViewlet(parent, FPOlayout);
+
+    viewletModel = new ViewletModel();
 
     connect(btnSelectAccount, SIGNAL(clicked()),
             this, SLOT(on_btnSelectAccount_clicked()));
 }
 
 void
-ViewletView::setViewlet(QWidget *parent)
+ViewletView::setViewlet(QWidget *parent, QVBoxLayout *FPOLayout)
 {
     /* Initialize widgets to defaults */
     comboAccountsList = new QComboBox();
     comboAccountsList->addItem(tr("-NA-"));
     btnSelectAccount = new QPushButton(tr("Select Account"));
 
-    /* Container layout for one viewlet */
-    gridFPO = new QGridLayout(parent);
+    /* 1) Account selection feature of the viewlet */
+    FPOLayout->addWidget(comboAccountsList);
+    FPOLayout->addWidget(btnSelectAccount);
 
-    /* First Row of the viewlet; selection widgets */
-    groupSelection = new QWidget();
-    vSelectionLayout = new QVBoxLayout();
-    groupSelection->setLayout(vSelectionLayout);
-    vSelectionLayout->addWidget(comboAccountsList);
-    vSelectionLayout->addWidget(btnSelectAccount);
+    /* 2) The actual viewlet display of account(s) data */
+    viewletDisplay = new QWidget();
+    //viewletDisplay = new QWidget(viewletScrollArea);
+    viewletDisplayLayout = new QVBoxLayout();
+    QSizeGrip * grip = new QSizeGrip(viewletDisplay);
+    viewletScrollArea = new QScrollArea();
 
-    /* Second row of the viewlet; display accounts data */
-    colMiniJournalFirst = new QGroupBox();
-    vColLayout = new QVBoxLayout();
-    colMiniJournalFirst->setLayout(vColLayout);
+    viewletScrollArea->setWidget(viewletDisplay);
+    viewletScrollArea->setAlignment(Qt::AlignLeft);
+    viewletScrollArea->setWidgetResizable(true);
+    viewletScrollArea->setBackgroundRole(QPalette::Dark);
 
-    gridFPO->addWidget(groupSelection, 0, 0);
-    gridFPO->addWidget(colMiniJournalFirst, 1, 0);
+    viewletDisplay->setLayout(viewletDisplayLayout);
+    //viewletScrollArea->setMinimumSize(100, 100);
+    //viewletScrollArea->setMaximumWidth(400);
+
+    /*
+    // test scroll area
+    for(int i=0; i<50; i++)
+    {
+        QLabel *newrecon = new QLabel("Hello", viewletDisplay);
+        //newrecon->setFixedSize(100, 100);
+        viewletDisplayLayout->addWidget(newrecon);
+    }
+    */
+
+    //
+    //viewletDisplayLayout->addWidget(viewletDisplay);
+    //viewletDisplayLayout->addWidget(viewletScrollArea);
+    FPOLayout->addWidget(viewletDisplay);
+    FPOLayout->addWidget(viewletScrollArea);
+
 }
 
 void
@@ -44,51 +65,6 @@ ViewletView::loadAccountsTreeComboBox(AccountListModel * const m_accountsListMod
 {
     accountsList = m_accountsListModel;
     comboAccountsList->setModel(accountsList);
-}
-
-/** GFunc called for gSplitList processing */
-void
-ViewletView::splits_func(gpointer data, gpointer user_data)
-{
-    ::Split const * pSplit;
-    pSplit = (::Split *) data;
-    //
-    qDebug()<<"~~~~~~~~~~";
-
-    // return pointer of parent account;
-    qDebug()<<"~ Parent * \t"<<::xaccSplitGetAccount(pSplit);
-
-    // return action string
-    qDebug()<<"~ Action \t"<<::xaccSplitGetAction(pSplit);
-
-    // return amount
-    //qDebug()<<"~ Amount \t"<<::xaccSplitGetAmount();
-
-    // balance including this split @see xaccSplitGetClearedBalance
-    //qDebug()<<"~ Balance \t"<<::xaccSplitGetBalance();
-
-    // account code
-    qDebug()<<"~  Code \t"<<::xaccSplitGetCorrAccountCode(pSplit);
-
-    // account name
-    qDebug()<<"~  Account \t"<<::xaccSplitGetCorrAccountName(pSplit);
-
-    //
-    qDebug()<<"~ Reconcile \t"<<::xaccSplitGetReconcile(pSplit);
-
-    //Get pointer to parent txn
-    qDebug()<<"~ Parent Txn **"<<xaccSplitGetParent(pSplit);
-    ::Transaction *parentTxn = xaccSplitGetParent(pSplit);
-
-    qDebug()<<"~ Description \t"<<::xaccTransGetDescription(parentTxn);
-
-    qDebug()<<"~ Notes \t"<<::xaccTransGetNotes(parentTxn);
-
-    qDebug()<<"~ Num \t"<<::xaccTransGetNum(parentTxn);
-
-    qDebug()<<::xaccSplitGetMemo(pSplit);
-
-    // xaccSplitGetOtherSplit to quickly get the other * split in a two split txn
 }
 
 /***** Slots *****/
@@ -100,11 +76,29 @@ ViewletView::on_btnSelectAccount_clicked()
     selectedAccount = accountsList->at(selectedAccountIndex);
 
     qDebug()<<"~ Account \t"<<::xaccAccountGetName(selectedAccount);
-    gSplitList = ::xaccAccountGetSplitList(selectedAccount);
-    qDebug()<<"~ Splits \t"<<g_list_length(gSplitList);
-    g_list_foreach(gSplitList, splits_func, NULL);
-    //g_list_free(gSplitList);
+    pSplitList = ::xaccAccountGetSplitList(selectedAccount);
 
+    SplitQList newSplits = Split::fromGList(pSplitList);
+    int num = newSplits.count();
+    ::Split * split;
+    //Split  * oneSplit;
+    for (int i = 0; i < num; i++)
+    {
+        split = (::Split *)newSplits.at(i);
+        //oneSplit = (Split *)newSplits.at(i);
+        //oneSplit->getMemo();
+
+
+        QLineEdit * editAccountName = new QLineEdit(
+                    viewletModel->getAccountName(split));
+        viewletDisplayLayout->addWidget(editAccountName);
+
+        /*QLineEdit * editReconcileStatus = new QLineEdit(
+                    viewletModel->getReconciliationStatus(split));
+        viewletDisplayLayout->addWidget(editReconcileStatus);*/
+
+
+    }
     //unifiedColCell GroupBox Manipulations
 
     /*int rowNum=2;

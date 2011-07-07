@@ -8,10 +8,13 @@ extern "C"
 #include "qof.h"
 #include "engine/Account.h"
 #include "engine/Transaction.h"
+#include "engine/Split.h"
 }
 
 #include "gnc/mainwindow.hpp"
+#include "gnc/fpo/ViewletModel.hpp"
 #include "gnc/AccountItemModel.hpp"
+#include "gnc/SplitListModel.hpp"
 
 #include <QtCore>
 #include <QAbstractItemModel>
@@ -20,11 +23,13 @@ extern "C"
 
 namespace gnc
 {
+class ViewletModel;
+
 class ViewletView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ViewletView(QWidget *parent = 0);
+    explicit ViewletView(QWidget *parent = 0, QVBoxLayout *FPOLayout = NULL);
     QVBoxLayout *viewletLayout;
     void loadAccountsTreeComboBox(AccountListModel * const m_accountsListModel);
 
@@ -39,24 +44,28 @@ private:
     QPushButton *btnSelectAccount;
     QComboBox *comboAccountsList;
 
-    /* Layouts */
-    QGridLayout *gridFPO;
+    ViewletModel *viewletModel;
+
+    QScrollArea *viewletScrollArea;
+    QWidget *viewletDisplay;
+    QVBoxLayout *viewletDisplayLayout;
+
+
 
     QWidget *groupSelection;
     QVBoxLayout *vSelectionLayout;
 
-    QGroupBox *colMiniJournalFirst;
+    QWidget *colMiniJournalFirst;
     QVBoxLayout *vColLayout;
 
 
     /** @todo */
-    SplitList *gSplitList;
+    SplitList *pSplitList;
     ::Account *selectedAccount;
     int selectedAccountIndex;
 
     /* Methods */
-    void setViewlet(QWidget *parent);
-    static void splits_func(gpointer data, gpointer user_data);
+    void setViewlet(QWidget *parent, QVBoxLayout *FPOLayout);
 
 private slots:
     void on_btnSelectAccount_clicked();

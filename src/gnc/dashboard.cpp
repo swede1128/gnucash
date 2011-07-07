@@ -122,8 +122,8 @@ void
 Dashboard::setFPO()
 {
     QVBoxLayout *FPOLayout = new QVBoxLayout;
-    ui->dockwFPO->setLayout(FPOLayout);
-    fpoWidget = new FPO(ui->dockcFPO);
+    ui->dockcFPO->setLayout(FPOLayout);
+    fpoWidget = new FPO(ui->dockcFPO, FPOLayout);
     /* ui->dockwFPO->setAllowedAreas(Qt::LeftDockWidgetArea
                                   | Qt::RightDockWidgetArea);*/
 }
