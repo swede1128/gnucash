@@ -14,6 +14,8 @@ extern "C"
 #include "engine/Split.h"
 }
 
+#include "gnc/Split.hpp"
+
 namespace gnc
 {
 
@@ -25,9 +27,7 @@ public:
         return (QString const) ::xaccSplitGetCorrAccountName(split); }
     QString getReconciliationStatus(::Split * split) {
         return (QString const) ::xaccSplitGetReconcile(split); }
-    QDate getDatePosted(::Split * split) {
-        ::Transaction *txn = xaccSplitGetParent(split);
-        return toQDate(::xaccTransGetDatePostedGDate(txn)); }
+
     inline QDate toQDate(const ::GDate& d)
     {
         if (g_date_valid(&d))
@@ -38,6 +38,14 @@ public:
     QString getDescription(::Split * split) {
         ::Transaction *txn = xaccSplitGetParent(split);
         return (QString const) xaccTransGetDescription(txn); }
+
+    QQueue<QWidget *> createViewlet(::Account * selectedAccount);
+
+private:
+
+    QDate getDatePosted(::Split * split) {
+        ::Transaction *txn = xaccSplitGetParent(split);
+        return toQDate(::xaccTransGetDatePostedGDate(txn)); }
 
 };
 

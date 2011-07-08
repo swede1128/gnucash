@@ -3,7 +3,7 @@
 namespace gnc
 {
 
-ViewletView::ViewletView(QWidget *parent, QVBoxLayout *FPOlayout) :
+ViewletView::ViewletView(QWidget * parent, QVBoxLayout * FPOlayout) :
     QWidget(parent)
 {
     setViewlet(parent, FPOlayout);
@@ -34,6 +34,18 @@ ViewletView::setViewlet(QWidget *parent, QVBoxLayout *FPOLayout)
     viewletScrollArea->setWidgetResizable(true);
     viewletDisplay->setLayout(viewletDisplayLayout);
     FPOLayout->addWidget(viewletScrollArea);
+
+    if(comboAccountsList->currentIndex())
+    {
+        selectedAccountIndex = comboAccountsList->currentIndex();
+        selectedAccount = accountsList->at(selectedAccountIndex);
+        viewletWidgetsQueue = viewletModel->createViewlet(selectedAccount);
+        const int n = viewletWidgetsQueue.count();
+
+        for (int i = 0; i < n; ++i) {
+            viewletDisplayLayout->addWidget(viewletWidgetsQueue[i]);
+        }
+    }
 }
 
 void
@@ -51,34 +63,17 @@ ViewletView::createViewlet()
     selectedAccountIndex = comboAccountsList->currentIndex();
     selectedAccount = accountsList->at(selectedAccountIndex);
 
-    pSplitList = ::xaccAccountGetSplitList(selectedAccount);
-
-    SplitQList newSplits = Split::fromGList(pSplitList);
-    int num = newSplits.count();
-    ::Split * split;
-    //Split  * oneSplit;
-    for (int i = 0; i < num; i++)
+    foreach (QWidget *w, viewletWidgetsQueue)
     {
-        split = (::Split *)newSplits.at(i);
-        //oneSplit = (Split *)newSplits.at(i);
-        //oneSplit->getMemo();
+        w->hide();
+        viewletDisplayLayout->removeWidget(w);
+    }
 
-        QDateEdit * editSplitDate = new QDateEdit();
-        editSplitDate->setDate(viewletModel->getDatePosted(split));
-        viewletDisplayLayout->addWidget(editSplitDate);
+    viewletWidgetsQueue = viewletModel->createViewlet(selectedAccount);
+    const int n = viewletWidgetsQueue.count();
 
-        QLabel * editAccountName = new QLabel(
-                    viewletModel->getAccountName(split));
-        viewletDisplayLayout->addWidget(editAccountName);
-
-        QLabel * editDescription = new QLabel("~    Description: "+
-                    viewletModel->getDescription(split));
-        viewletDisplayLayout->addWidget(editDescription);
-
-
-        /*QLineEdit * editReconcileStatus = new QLineEdit(
-                    viewletModel->getReconciliationStatus(split));
-        viewletDisplayLayout->addWidget(editReconcileStatus);*/
+    for (int i = 0; i < n; ++i) {
+        viewletDisplayLayout->addWidget(viewletWidgetsQueue[i]);
     }
 }
 

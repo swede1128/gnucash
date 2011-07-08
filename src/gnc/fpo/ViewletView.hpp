@@ -29,8 +29,7 @@ class ViewletView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ViewletView(QWidget *parent = 0, QVBoxLayout *FPOLayout = NULL);
-    QVBoxLayout *viewletLayout;
+    explicit ViewletView(QWidget * parent = 0, QVBoxLayout * FPOLayout = NULL);
     void loadAccountsTreeComboBox(AccountListModel * const m_accountsListModel);
 
 signals:
@@ -38,33 +37,24 @@ signals:
 public slots:
 
 private:
-    AccountListModel *accountsList;
+    ViewletModel * viewletModel;
+    AccountListModel * accountsList;
 
-    /* UI Widgets */
-    QComboBox *comboAccountsList;
+    /* UI Widgets */    
+    QWidget * viewletDisplay;
+    QQueue<QWidget *> viewletWidgetsQueue;
+    QVBoxLayout * viewletDisplayLayout;
+    QScrollArea * viewletScrollArea;
 
-    ViewletModel *viewletModel;
-
-    QScrollArea *viewletScrollArea;
-    QWidget *viewletDisplay;
-    QVBoxLayout *viewletDisplayLayout;
-
-
-
-    QWidget *groupSelection;
-    QVBoxLayout *vSelectionLayout;
-
-    QWidget *colMiniJournalFirst;
-    QVBoxLayout *vColLayout;
-
+    QComboBox * comboAccountsList;
 
     /** @todo */
-    SplitList *pSplitList;
-    ::Account *selectedAccount;
+    SplitList * pSplitList;
+    ::Account * selectedAccount;
     int selectedAccountIndex;
 
     /* Methods */
-    void setViewlet(QWidget *parent, QVBoxLayout *FPOLayout);
+    void setViewlet(QWidget * parent, QVBoxLayout * FPOLayout);
 
 private slots:
     void createViewlet();
