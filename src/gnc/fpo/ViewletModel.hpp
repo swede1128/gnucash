@@ -32,12 +32,12 @@ public:
 
 private:
     QString getAccountName(::Split * split) {
-        return static_cast< QString const>(::xaccSplitGetCorrAccountName(split)); }
+        return QString::fromUtf8(::xaccSplitGetCorrAccountName(split)); }
     QString getReconciliationStatus(::Split * split) {
         return static_cast< QString const>(::xaccSplitGetReconcile(split)); }
     QString getDescription(::Split * split) {
         ::Transaction *txn = xaccSplitGetParent(split);
-        return static_cast< QString const>(::xaccTransGetDescription(txn)); }
+        return QString::fromUtf8(::xaccTransGetDescription(txn)); }
     QDate getDatePosted(::Split * split) {
         ::Transaction *txn = ::xaccSplitGetParent(split);
         return toQDate(::xaccTransGetDatePostedGDate(txn)); }
