@@ -32,14 +32,14 @@ public:
 
 private:
     QString getAccountName(::Split * split) {
-        return (QString const) ::xaccSplitGetCorrAccountName(split); }
+        return static_cast< QString const>(::xaccSplitGetCorrAccountName(split)); }
     QString getReconciliationStatus(::Split * split) {
-        return (QString const) ::xaccSplitGetReconcile(split); }
+        return static_cast< QString const>(::xaccSplitGetReconcile(split)); }
     QString getDescription(::Split * split) {
         ::Transaction *txn = xaccSplitGetParent(split);
-        return (QString const) xaccTransGetDescription(txn); }
+        return static_cast< QString const>(::xaccTransGetDescription(txn)); }
     QDate getDatePosted(::Split * split) {
-        ::Transaction *txn = xaccSplitGetParent(split);
+        ::Transaction *txn = ::xaccSplitGetParent(split);
         return toQDate(::xaccTransGetDatePostedGDate(txn)); }
     inline QDate toQDate(const ::GDate& d)
     {

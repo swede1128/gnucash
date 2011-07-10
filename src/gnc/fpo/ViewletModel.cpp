@@ -17,7 +17,7 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
     ::Split * C_split;
     for (int i = 0; i < numOfSplits; i++)
     {
-        C_split = (::Split *)splitList.at(i);
+        C_split = static_cast< ::Split*>(splitList.at(i));
 
         QDateEdit * editSplitDate = new QDateEdit();
         editSplitDate->setDate(getDatePosted(C_split));
