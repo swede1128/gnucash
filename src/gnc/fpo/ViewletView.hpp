@@ -29,7 +29,7 @@ class ViewletView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ViewletView(QWidget * parent = 0, QVBoxLayout * FPOLayout = NULL);
+    explicit ViewletView(QWidget * parent = 0, QHBoxLayout * FPOLayout = NULL);
     void loadAccountsTreeComboBox(AccountListModel * const m_accountsListModel);
 
 signals:
@@ -42,7 +42,10 @@ private:
 
     /* UI Widgets */    
     QWidget * viewletDisplay;
-    QQueue<QWidget *> viewletWidgetsQueue;
+    QQueue<QWidget *> datesQueue;
+    QQueue<QWidget *> accountsQueue;
+    QQueue<QWidget *> descQueue;
+
     QVBoxLayout * viewletDisplayLayout;
     QScrollArea * viewletScrollArea;
 
@@ -54,10 +57,14 @@ private:
     int selectedAccountIndex;
 
     /* Methods */
-    void setViewlet(QWidget * parent, QVBoxLayout * FPOLayout);
+    void setViewlet(QWidget * parent, QHBoxLayout * FPOLayout);
+    void createViewlet();
+    void getViewletQueues();
+    void drawViewletLayout();
+    void removeViewletWidgets();
 
 private slots:
-    void createViewlet();
+    void updateViewlet();
 };
 
 } // END namespace gnc

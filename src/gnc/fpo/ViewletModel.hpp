@@ -23,11 +23,24 @@ class ViewletModel
 {
 public:
     ViewletModel();
+
+    void updateViewlet(::Account * selectedAccount);
+
+    QQueue<QWidget *> datesQueue;
+    QQueue<QWidget *> accountsQueue;
+    QQueue<QWidget *> descQueue;
+
+private:
     QString getAccountName(::Split * split) {
         return (QString const) ::xaccSplitGetCorrAccountName(split); }
     QString getReconciliationStatus(::Split * split) {
         return (QString const) ::xaccSplitGetReconcile(split); }
-
+    QString getDescription(::Split * split) {
+        ::Transaction *txn = xaccSplitGetParent(split);
+        return (QString const) xaccTransGetDescription(txn); }
+    QDate getDatePosted(::Split * split) {
+        ::Transaction *txn = xaccSplitGetParent(split);
+        return toQDate(::xaccTransGetDatePostedGDate(txn)); }
     inline QDate toQDate(const ::GDate& d)
     {
         if (g_date_valid(&d))
@@ -35,18 +48,6 @@ public:
         else
             return QDate();
     }
-    QString getDescription(::Split * split) {
-        ::Transaction *txn = xaccSplitGetParent(split);
-        return (QString const) xaccTransGetDescription(txn); }
-
-    QQueue<QWidget *> createViewlet(::Account * selectedAccount);
-
-private:
-
-    QDate getDatePosted(::Split * split) {
-        ::Transaction *txn = xaccSplitGetParent(split);
-        return toQDate(::xaccTransGetDatePostedGDate(txn)); }
-
 };
 
 } // END namespace gnc

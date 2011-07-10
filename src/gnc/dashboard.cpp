@@ -121,7 +121,7 @@ Dashboard::setBasicTxnEntryFormLayout()
 void
 Dashboard::setFPO()
 {
-    QVBoxLayout *FPOLayout = new QVBoxLayout;
+    QHBoxLayout *FPOLayout = new QHBoxLayout;
     ui->dockcFPO->setLayout(FPOLayout);
     fpoWidget = new FPO(ui->dockcFPO, FPOLayout);
     /* ui->dockwFPO->setAllowedAreas(Qt::LeftDockWidgetArea

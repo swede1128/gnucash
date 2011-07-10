@@ -3,26 +3,32 @@
 namespace gnc
 {
 
-ViewletView::ViewletView(QWidget * parent, QVBoxLayout * FPOlayout) :
+ViewletView::ViewletView(QWidget * parent, QHBoxLayout * FPOlayout) :
     QWidget(parent)
 {
-    setViewlet(parent, FPOlayout);
-
     viewletModel = new ViewletModel();
 
+    setViewlet(parent, FPOlayout);
+
     connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(createViewlet()));
+            this, SLOT(updateViewlet()));
 }
 
 void
-ViewletView::setViewlet(QWidget *parent, QVBoxLayout *FPOLayout)
+ViewletView::setViewlet(QWidget *parent, QHBoxLayout *FPOLayout)
 {
     /* Initialize widgets to defaults */
     comboAccountsList = new QComboBox();
     comboAccountsList->addItem(tr("-NA-"));
 
+    QWidget *viewletContainer = new QWidget;
+    FPOLayout->addWidget(viewletContainer);
+
+    QVBoxLayout *vLay = new QVBoxLayout;
+    viewletContainer->setLayout(vLay);
+
     /* 1) Account selection feature of the viewlet */
-    FPOLayout->addWidget(comboAccountsList);
+    vLay->addWidget(comboAccountsList);
 
     /* 2) The actual viewlet display of account(s) data */
     viewletDisplay = new QWidget();
@@ -33,19 +39,9 @@ ViewletView::setViewlet(QWidget *parent, QVBoxLayout *FPOLayout)
     viewletScrollArea->setAlignment(Qt::AlignLeft);
     viewletScrollArea->setWidgetResizable(true);
     viewletDisplay->setLayout(viewletDisplayLayout);
-    FPOLayout->addWidget(viewletScrollArea);
+    vLay->addWidget(viewletScrollArea);
 
-    if(comboAccountsList->currentIndex())
-    {
-        selectedAccountIndex = comboAccountsList->currentIndex();
-        selectedAccount = accountsList->at(selectedAccountIndex);
-        viewletWidgetsQueue = viewletModel->createViewlet(selectedAccount);
-        const int n = viewletWidgetsQueue.count();
-
-        for (int i = 0; i < n; ++i) {
-            viewletDisplayLayout->addWidget(viewletWidgetsQueue[i]);
-        }
-    }
+    createViewlet();
 }
 
 void
@@ -55,26 +51,73 @@ ViewletView::loadAccountsTreeComboBox(AccountListModel * const m_accountsListMod
     comboAccountsList->setModel(accountsList);
 }
 
-/***** Slots *****/
+
 
 void
 ViewletView::createViewlet()
 {
-    selectedAccountIndex = comboAccountsList->currentIndex();
-    selectedAccount = accountsList->at(selectedAccountIndex);
+    if(comboAccountsList->currentIndex())
+    {
+        selectedAccountIndex = comboAccountsList->currentIndex();
+        selectedAccount = accountsList->at(selectedAccountIndex);
 
-    foreach (QWidget *w, viewletWidgetsQueue)
+        getViewletQueues();
+        drawViewletLayout();
+    }
+}
+
+void
+ViewletView::getViewletQueues()
+{
+    viewletModel->updateViewlet(selectedAccount);
+    datesQueue = viewletModel->datesQueue;
+    accountsQueue = viewletModel->accountsQueue;
+    descQueue = viewletModel->descQueue;
+}
+
+void
+ViewletView::drawViewletLayout()
+{
+    int numOfDates = datesQueue.count();
+    for (int i = 0; i < numOfDates; ++i)
+    {
+        viewletDisplayLayout->addWidget(datesQueue[i]);
+        viewletDisplayLayout->addWidget(accountsQueue[i]);
+        viewletDisplayLayout->addWidget(descQueue[i]);
+    }
+}
+
+void
+ViewletView::removeViewletWidgets()
+{
+    foreach (QWidget *w, datesQueue)
     {
         w->hide();
         viewletDisplayLayout->removeWidget(w);
     }
-
-    viewletWidgetsQueue = viewletModel->createViewlet(selectedAccount);
-    const int n = viewletWidgetsQueue.count();
-
-    for (int i = 0; i < n; ++i) {
-        viewletDisplayLayout->addWidget(viewletWidgetsQueue[i]);
+    foreach (QWidget *w, accountsQueue)
+    {
+        w->hide();
+        viewletDisplayLayout->removeWidget(w);
     }
+    foreach (QWidget *w, descQueue)
+    {
+        w->hide();
+        viewletDisplayLayout->removeWidget(w);
+    }
+}
+
+/***** Slots *****/
+
+void
+ViewletView::updateViewlet()
+{
+    selectedAccountIndex = comboAccountsList->currentIndex();
+    selectedAccount = accountsList->at(selectedAccountIndex);
+
+    removeViewletWidgets();
+    getViewletQueues();
+    drawViewletLayout();
 }
 
 } // END namespace gnc

@@ -7,38 +7,35 @@ ViewletModel::ViewletModel()
 {
 }
 
-QQueue<QWidget *>
-ViewletModel::createViewlet(::Account * selectedAccount)
+void
+ViewletModel::updateViewlet(::Account * selectedAccount)
 {
     ::SplitList * C_SplitList = ::xaccAccountGetSplitList(selectedAccount);
 
     SplitQList splitList = Split::fromGList(C_SplitList);
     int numOfSplits = splitList.count();
-
-    ::Split * split;
-    QQueue<QWidget *> viewletWidgetsQueue;
+    ::Split * C_split;
     for (int i = 0; i < numOfSplits; i++)
     {
-        split = (::Split *)splitList.at(i);
+        C_split = (::Split *)splitList.at(i);
 
         QDateEdit * editSplitDate = new QDateEdit();
-        editSplitDate->setDate(getDatePosted(split));
-        viewletWidgetsQueue.enqueue(editSplitDate);
-    /*
-            QLabel * editAccountName = new QLabel(
-                        viewletModel->getAccountName(split));
-            viewletDisplayLayout->addWidget(editAccountName);
+        editSplitDate->setDate(getDatePosted(C_split));
+        datesQueue.enqueue(editSplitDate);
 
-            QLabel * editDescription = new QLabel("~    Description: "+
-                        viewletModel->getDescription(split));
-            viewletDisplayLayout->addWidget(editDescription);
-    */
+        QLabel * editAccountName = new QLabel();
+        editAccountName->setText(getAccountName(C_split));
+        accountsQueue.enqueue(editAccountName);
+
+        QLabel * editDescription = new QLabel();
+        editDescription->setText("~    Description: " + getDescription(C_split));
+        descQueue.enqueue(editDescription);
+
 
             /*QLineEdit * editReconcileStatus = new QLineEdit(
                         viewletModel->getReconciliationStatus(split));
             viewletDisplayLayout->addWidget(editReconcileStatus);*/
     }
-    return viewletWidgetsQueue;
 }
 
 } // END namespace gnc
