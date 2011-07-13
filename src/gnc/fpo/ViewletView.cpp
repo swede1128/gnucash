@@ -51,8 +51,6 @@ ViewletView::loadAccountsTreeComboBox(AccountListModel * const m_accountsListMod
     comboAccountsList->setModel(accountsList);
 }
 
-
-
 void
 ViewletView::createViewlet()
 {
@@ -82,8 +80,11 @@ ViewletView::drawViewletLayout()
     for (int i = 0; i < numOfDates; ++i)
     {
         viewletDisplayLayout->addWidget(datesQueue[i]);
+        datesQueue[i]->setObjectName("dateWidget");
         viewletDisplayLayout->addWidget(accountsQueue[i]);
+        accountsQueue[i]->setObjectName("accountWidget");
         viewletDisplayLayout->addWidget(descQueue[i]);
+        descQueue[i]->setObjectName("descWidget");
     }
 }
 

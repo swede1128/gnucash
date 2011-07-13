@@ -1,0 +1,9 @@
+#dateWidget {
+background: gray;
+}
+#accountWidget {
+background: gray;
+}
+#descWidget {
+background: gray;
+}

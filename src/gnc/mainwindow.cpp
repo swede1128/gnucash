@@ -99,7 +99,7 @@ MainWindow::MainWindow()
     QCoreApplication::setOrganizationDomain("gnucash.org");
     QCoreApplication::setApplicationName("Cutecash");
 
-    readSettings();    
+    readSettings();
 
     connect(m_undoStack, SIGNAL(cleanChanged(bool)),
             this, SLOT(documentCleanStateChanged(bool)));

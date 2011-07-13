@@ -47,6 +47,12 @@ Dashboard::Dashboard(QWidget *parent) :
     //ui->dockwBasicTxn->raise();
     ui->dockwSplitTxn->hide();
 
+    /* Set stylesheet, so that some styling to viewlets can be applied */
+    /*QFile styleSheetFile(":/qss-default");
+    styleSheetFile.open(QFile::ReadOnly);
+    QString styleSheetName = QLatin1String(styleSheetFile.readAll());
+    this->setStyleSheet(styleSheetName);*/
+
     connect(btnCreateBasicTxn, SIGNAL(clicked()),
             this, SLOT(on_btnCreateBasicTxn_clicked()));
 }
@@ -76,7 +82,7 @@ Dashboard::setUiWidgets()
     lineDescription = new QLineEdit();
     lineAmount      = new QLineEdit();
     lineAmount->setText(tr("0.00"));
-    lineAmount->setValidator(new QDoubleValidator(0.0, 100000000000.0, 2, this));
+    lineAmount->setValidator(new QDoubleValidator(0.0, 1e100, 2, this));
     lineMemo        = new QLineEdit();
     lineNum         = new QLineEdit();
     dateTxnDate = new QDateEdit();

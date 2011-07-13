@@ -69,6 +69,7 @@ SET (gnc_RESOURCES
   gnucash.qrc
   gtk-icons.qrc
   fallback-icons.qrc
+  stylesheets.qrc
 )
 
 IF (WITH_SQL)
