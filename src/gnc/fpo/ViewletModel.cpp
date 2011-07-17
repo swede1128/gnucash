@@ -20,23 +20,55 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
     SplitList * splitL = static_cast<SplitList *>(::xaccAccountGetSplitList(selectedAccount));
     SplitQList splitList = Split::fromGList(splitL);
     int numOfSplits = splitList.count();
-    Split split;
-    for (int i = 0; i < numOfSplits; i++)
+    Split split;    
+    QDate storedDate;
+    int i;
+
+
+    for (i = 0, storedDate.setYMD(1980,1,1); i < numOfSplits; i++)
     {
         split = splitList.at(i);
         Transaction trans = split.getParent();
 
         QDateEdit * editSplitDate = new QDateEdit();
         editSplitDate->setDate(trans.getDatePosted());
-        datesQueue.enqueue(editSplitDate);
+        editSplitDate->setEnabled(FALSE);
+        viewletEntries.datesQueue.enqueue(editSplitDate);
+        //viewletEntries.isNewDateQueue.enqueue(FALSE);
+
+        /*
+        if( editSplitDate->date() > storedDate)
+        {
+            qDebug() << "New date!! Show its widget.";
+            viewletEntries.isNewDateQueue.enqueue(TRUE);
+            storedDate = trans.getDatePosted();
+        }
+        */
 
         QLabel * editAccountName = new QLabel();
         editAccountName->setText(split.getCorrAccountName());
-        accountsQueue.enqueue(editAccountName);
+        viewletEntries.accountsQueue.enqueue(editAccountName);
 
+        /* get the amount of the split from its Numeric */
+        Numeric gncAmt;
+        gncAmt = split.getAmount();
+        double numer;
+        int denom;
+        numer = gncAmt.num();
+        denom = gncAmt.denom();
+        double amt = numer/denom;
+
+        /*
+        QLabel * editLabel = new QLabel();
+        editLabel->setText(QString::number(amt));
+        viewletEntries.splitAmountQueue.enqueue(editLabel);
+        */
+
+        /* temporary output; probably a separate widget for amount
+        with correct currency for the split in future */
         QLabel * editDescription = new QLabel();
-        editDescription->setText("~    Description: " + trans.getDescription());
-        descQueue.enqueue(editDescription);
+        editDescription->setText(trans.getDescription() + " ($ " + QString::number(amt) + ")");
+        viewletEntries.descQueue.enqueue(editDescription);
     }
 
 #if 0

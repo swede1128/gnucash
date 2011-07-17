@@ -59,53 +59,61 @@ ViewletView::createViewlet()
         selectedAccountIndex = comboAccountsList->currentIndex();
         selectedAccount = accountsList->at(selectedAccountIndex);
 
-        getViewletQueues();
+        processViewlet();
         drawViewletLayout();
     }
 }
 
 void
-ViewletView::getViewletQueues()
+ViewletView::processViewlet()
 {
     viewletModel->updateViewlet(selectedAccount);
-    datesQueue = viewletModel->datesQueue;
-    accountsQueue = viewletModel->accountsQueue;
-    descQueue = viewletModel->descQueue;
 }
 
 void
 ViewletView::drawViewletLayout()
 {
-    int numOfDates = datesQueue.count();
+    int numOfDates = viewletModel->viewletEntries.datesQueue.count();
     for (int i = 0; i < numOfDates; ++i)
     {
-        viewletDisplayLayout->addWidget(datesQueue[i]);
-        datesQueue[i]->setObjectName("dateWidget");
-        viewletDisplayLayout->addWidget(accountsQueue[i]);
-        accountsQueue[i]->setObjectName("accountWidget");
-        viewletDisplayLayout->addWidget(descQueue[i]);
-        descQueue[i]->setObjectName("descWidget");
+        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.datesQueue[i]);
+        viewletModel->viewletEntries.datesQueue[i]->setObjectName("dateWidget");
+        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.accountsQueue[i]);
+        viewletModel->viewletEntries.accountsQueue[i]->setObjectName("accountWidget");
+        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.descQueue[i]);
+        viewletModel->viewletEntries.descQueue[i]->setObjectName("descWidget");
+        /*
+        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.splitAmountQueue[i]);
+        viewletModel->viewletEntries.splitAmountQueue[i]->setObjectName("splitAmountWidget");
+        */
     }
 }
 
 void
 ViewletView::removeViewletWidgets()
 {
-    foreach (QWidget *w, datesQueue)
+    foreach (QWidget *w, viewletModel->viewletEntries.datesQueue)
+    {
+            w->hide();
+            viewletDisplayLayout->removeWidget(w);
+    }
+    foreach (QWidget *w, viewletModel->viewletEntries.accountsQueue)
     {
         w->hide();
         viewletDisplayLayout->removeWidget(w);
     }
-    foreach (QWidget *w, accountsQueue)
+    foreach (QWidget *w, viewletModel->viewletEntries.descQueue)
     {
         w->hide();
         viewletDisplayLayout->removeWidget(w);
     }
-    foreach (QWidget *w, descQueue)
+    /*
+    foreach (QWidget *w, viewletModel->viewletEntries.splitAmountQueue)
     {
         w->hide();
         viewletDisplayLayout->removeWidget(w);
     }
+    */
 }
 
 /***** Slots *****/
@@ -117,7 +125,7 @@ ViewletView::updateViewlet()
     selectedAccount = accountsList->at(selectedAccountIndex);
 
     removeViewletWidgets();
-    getViewletQueues();
+    processViewlet();
     drawViewletLayout();
 }
 

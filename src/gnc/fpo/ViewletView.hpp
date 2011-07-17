@@ -42,9 +42,6 @@ private:
 
     /* UI Widgets */    
     QWidget * viewletDisplay;
-    QQueue<QWidget *> datesQueue;
-    QQueue<QWidget *> accountsQueue;
-    QQueue<QWidget *> descQueue;
 
     QVBoxLayout * viewletDisplayLayout;
     QScrollArea * viewletScrollArea;
@@ -59,7 +56,7 @@ private:
     /* Methods */
     void setViewlet(QWidget * parent, QHBoxLayout * FPOLayout);
     void createViewlet();
-    void getViewletQueues();
+    void processViewlet();
     void drawViewletLayout();
     void removeViewletWidgets();
 

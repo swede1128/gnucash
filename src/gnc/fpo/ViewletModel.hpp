@@ -26,9 +26,14 @@ public:
 
     void updateViewlet(::Account * selectedAccount);
 
-    QQueue<QWidget *> datesQueue;
-    QQueue<QWidget *> accountsQueue;
-    QQueue<QWidget *> descQueue;
+    struct structViewletEntries
+    {
+        QQueue<QWidget *> datesQueue;
+        //QQueue<bool> isNewDateQueue;
+        QQueue<QWidget *> accountsQueue;
+        QQueue<QWidget *> descQueue;
+        QQueue<QWidget *> splitAmountQueue;
+    }viewletEntries;
 
 private:
     QString getAccountName(::Split * split) {
