@@ -14,8 +14,7 @@ ViewletModel::ViewletModel()
 void
 ViewletModel::updateViewlet(::Account * selectedAccount)
 {
-    Account * account;
-    account =  reinterpret_cast<Account *>(selectedAccount);
+    Account account(selectedAccount);
 
     SplitList * splitL = static_cast<SplitList *>(::xaccAccountGetSplitList(selectedAccount));
     SplitQList splitList = Split::fromGList(splitL);
