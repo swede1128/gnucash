@@ -21,11 +21,11 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
     SplitQList splitList = Split::fromGList(splitL);
     int numOfSplits = splitList.count();
     Split split;    
-    QDate storedDate;
+    //QDate storedDate;
     int i;
 
 
-    for (i = 0, storedDate.setYMD(1980,1,1); i < numOfSplits; i++)
+    for (i = 0; i < numOfSplits; i++)
     {
         split = splitList.at(i);
         Transaction trans = split.getParent();
@@ -69,6 +69,36 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
         QLabel * editDescription = new QLabel();
         editDescription->setText(trans.getDescription() + " ($ " + QString::number(amt) + ")");
         viewletEntries.descQueue.enqueue(editDescription);
+
+
+        /* get all transactions earlier than the specified date */
+        QofQuery *qr =  qof_query_create_for (GNC_ID_SPLIT);
+        // Query for transactions
+        QofQuery *txn_query = qof_query_create_for (GNC_ID_TRANS);
+        // To look for dates, you need to create a "PredData" object
+        Timespec calve_date;
+        calve_date =  gdate_to_timespec(trans.getGDatePosted());
+        QofQueryPredData *pred_data = qof_query_date_predicate (QOF_COMPARE_LTE,
+                                              QOF_DATE_MATCH_NORMAL,
+                                              calve_date);
+        // and additionally a "query parameter" object
+        GSList *param_list = qof_query_build_param_list (TRANS_DATE_POSTED, NULL);
+        // The "PredData" and the "query parameter" object are added to this query
+        qof_query_add_term (txn_query, param_list, pred_data,
+                            QOF_QUERY_FIRST_TERM);
+
+        // Query is run; result is returned
+        GList *result =  qof_query_run (qr);
+
+        SplitQList querySplitList = Split::fromGList(result);
+        Split qSplit = querySplitList.at(i);
+
+        // "result" is now a GList of "Transaction*" because at
+        //qof_query_create_for, we've asked for transactions.
+
+        // When finished, delete the QofQuery object but this will
+        // also delete the "result" list.
+        qof_query_destroy (txn_query);
     }
 
 #if 0
