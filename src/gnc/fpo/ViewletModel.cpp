@@ -23,7 +23,7 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
     //QDate storedDate;
     int i;
 
-
+    /* first implementation */
     for (i = 0; i < numOfSplits; i++)
     {
         split = splitList.at(i);
@@ -69,9 +69,9 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
         editDescription->setText(trans.getDescription() + " ($ " + QString::number(amt) + ")");
         viewletEntries.descQueue.enqueue(editDescription);
 
-
         /* get all transactions earlier than the specified date */
         QofQuery *qr =  qof_query_create_for (GNC_ID_SPLIT);
+        qof_query_set_book(qr, ::gnc_account_get_book(selectedAccount));
         // Query for transactions
         QofQuery *txn_query = qof_query_create_for (GNC_ID_TRANS);
         // To look for dates, you need to create a "PredData" object
@@ -91,6 +91,7 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
 
         SplitQList querySplitList = Split::fromGList(result);
         Split qSplit = querySplitList.at(i);
+        //qDebug()<< qSplit.getCorrAccountName();
 
         // "result" is now a GList of "Transaction*" because at
         //qof_query_create_for, we've asked for transactions.
@@ -98,6 +99,23 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
         // When finished, delete the QofQuery object but this will
         // also delete the "result" list.
         qof_query_destroy (txn_query);
+    }
+
+    /* Second implementation
+       Now only build up data for the viewlet. Offload the widget
+       generation to the View.
+    */
+    for (i = 0; i < numOfSplits; i++)
+    {
+        split = splitList.at(i);
+        Transaction trans = split.getParent();
+
+        newstructViewletEntries strct;
+        strct.descQueue = trans.getDescription();
+        newviewletEntriesQueue.enqueue(strct);
+        newstructViewletEntries singlestrct = newviewletEntriesQueue.at(i);
+
+        qDebug()<<singlestrct.descQueue;
     }
 
 #if 0

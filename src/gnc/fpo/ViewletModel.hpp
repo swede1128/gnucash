@@ -35,6 +35,16 @@ public:
         QQueue<QWidget *> splitAmountQueue;
     }viewletEntries;
 
+    struct newstructViewletEntries
+    {
+        QDate datesQueue;
+        QString accountsQueue;
+        QString descQueue;
+        QString splitAmountQueue;
+    };
+
+    QQueue<newstructViewletEntries> newviewletEntriesQueue;
+
 private:
     QString getAccountName(::Split * split) {
         return QString::fromUtf8(::xaccSplitGetCorrAccountName(split)); }
