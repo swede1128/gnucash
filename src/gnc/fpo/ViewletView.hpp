@@ -32,21 +32,30 @@ public:
     explicit ViewletView(QWidget * parent = 0, QHBoxLayout * FPOLayout = NULL);
     void loadAccountsTreeComboBox(AccountListModel * const m_accountsListModel);
 
+    /* Called by FPO to generate appropriate viewlet */
+    void setDefaultViewlet(QWidget * parent, QHBoxLayout * FPOLayout);
+
 signals:
 
 public slots:
 
 private:
-    ViewletModel * viewletModel;
-    AccountListModel * accountsList;
+    ViewletModel *viewletModel;
+    AccountListModel *accountsList;
 
-    /* UI Widgets */    
-    QWidget * viewletDisplay;
+    /* so that update viewlet can use it to dynamically generate */
+    QVBoxLayout *viewletDisplayLayout;
 
-    QVBoxLayout * viewletDisplayLayout;
-    QScrollArea * viewletScrollArea;
+    /** @combofix */
+    QComboBox * comboAccountsList;    
 
-    QComboBox * comboAccountsList;
+    struct structDefaultViewletEntries
+    {
+        QDate txnDate;
+        QString splitAccount;
+        QString txnDescription;
+        QString splitAmount;
+    };
 
     /** @todo */
     SplitList * pSplitList;
@@ -54,10 +63,6 @@ private:
     int selectedAccountIndex;
 
     /* Methods */
-    void setViewlet(QWidget * parent, QHBoxLayout * FPOLayout);
-    void createViewlet();
-    void processViewlet();
-    void drawViewletLayout();
     void removeViewletWidgets();
 
 private slots:

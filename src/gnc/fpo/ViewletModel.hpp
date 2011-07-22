@@ -26,6 +26,9 @@ public:
 
     void updateViewlet(::Account * selectedAccount);
 
+
+
+    //depre
     struct structViewletEntries
     {
         QQueue<QWidget *> datesQueue;
@@ -33,19 +36,21 @@ public:
         QQueue<QWidget *> accountsQueue;
         QQueue<QWidget *> descQueue;
         QQueue<QWidget *> splitAmountQueue;
-    }viewletEntries;
+    } viewletEntries;
 
-    struct newstructViewletEntries
+    struct structDefaultViewletEntries
     {
-        QDate datesQueue;
-        QString accountsQueue;
-        QString descQueue;
-        QString splitAmountQueue;
+        QDate txnDate;
+        QString splitAccount;
+        QString txnDescription;
+        QString splitAmount;
     };
+    structDefaultViewletEntries tempEntry;
 
-    QQueue<newstructViewletEntries> newviewletEntriesQueue;
+    QQueue<structDefaultViewletEntries> queueDefaultEntries;
 
 private:
+    //depre
     QString getAccountName(::Split * split) {
         return QString::fromUtf8(::xaccSplitGetCorrAccountName(split)); }
     QString getReconciliationStatus(::Split * split) {

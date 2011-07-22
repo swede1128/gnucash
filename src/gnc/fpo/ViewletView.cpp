@@ -8,32 +8,45 @@ ViewletView::ViewletView(QWidget * parent, QHBoxLayout * FPOlayout) :
 {
     viewletModel = new ViewletModel();
 
-    setViewlet(parent, FPOlayout);
+    /* For default viewlet */
+    comboAccountsList = new QComboBox();
+    comboAccountsList->addItem(tr("-NA-"));
 
     connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
             this, SLOT(updateViewlet()));
 }
 
 void
-ViewletView::setViewlet(QWidget *parent, QHBoxLayout *FPOLayout)
+ViewletView::setDefaultViewlet(QWidget *parent, QHBoxLayout *FPOLayout)
 {
-    /* Initialize widgets to defaults */
-    comboAccountsList = new QComboBox();
-    comboAccountsList->addItem(tr("-NA-"));
-
+    /* Add a new QWidget (acts as a container for this viewlet) to the
+       layout of QWidget (QDockWidget>QWidget, i.e, dockwFPO>dockcFPO)
+       in dashboard QMainWindow.
+    */
     QWidget *viewletContainer = new QWidget;
     FPOLayout->addWidget(viewletContainer);
 
+    /* Set a layout for the container QWidget */
     QVBoxLayout *vLay = new QVBoxLayout;
     viewletContainer->setLayout(vLay);
 
-    /* 1) Account selection feature of the viewlet */
+    /***** Start of viewlet specific implementations *****/
+    /* Specification:
+       This default viewlet contains two widgets, 1) An account
+       selection widget, and 2) A scroll area which wraps a QWidget
+       to show the entries.*/
+    /** @combofix 1) Account selection feature of the viewlet  */
+    /*
+    comboAccountsList = new QComboBox();
+    comboAccountsList->addItem(tr("-NA-"));
+    */
+
     vLay->addWidget(comboAccountsList);
 
-    /* 2) The actual viewlet display of account(s) data */
-    viewletDisplay = new QWidget();
+    /* 2) The actual viewlet display of account selected in 1) */
+    QWidget *viewletDisplay = new QWidget();
     viewletDisplayLayout = new QVBoxLayout();
-    viewletScrollArea = new QScrollArea();
+    QScrollArea *viewletScrollArea = new QScrollArea();
 
     viewletScrollArea->setWidget(viewletDisplay);
     viewletScrollArea->setAlignment(Qt::AlignLeft);
@@ -41,7 +54,41 @@ ViewletView::setViewlet(QWidget *parent, QHBoxLayout *FPOLayout)
     viewletDisplay->setLayout(viewletDisplayLayout);
     vLay->addWidget(viewletScrollArea);
 
-    createViewlet();
+    //create viewlet
+    if(comboAccountsList->currentIndex())
+    {
+        selectedAccountIndex = comboAccountsList->currentIndex();
+        selectedAccount = accountsList->at(selectedAccountIndex);
+
+        // processViewlet
+        viewletModel->updateViewlet(selectedAccount);
+
+        // drawviewlet
+        int numOfDates = viewletModel->queueDefaultEntries.count();
+        for (int i = 0; i < numOfDates; ++i)
+        {
+            //structDefaultViewletEntries tempEntry = viewletModel->queueDefaultEntries.at(i);
+            viewletModel->tempEntry = viewletModel->queueDefaultEntries.at(i);
+            QLabel *lblTxnDescription = new QLabel();
+
+            lblTxnDescription->setText(viewletModel->tempEntry.txnDescription);
+            viewletDisplayLayout->addWidget(lblTxnDescription);
+            lblTxnDescription->setObjectName("descWidget");
+
+           //LEFT OFF HERE now work on removeViewletWidgets
+
+            /*
+            viewletDisplayLayout->addWidget(viewletModel->viewletEntries.accountsQueue[i]);
+            viewletModel->viewletEntries.accountsQueue[i]->setObjectName("accountWidget");
+            viewletDisplayLayout->addWidget(viewletModel->viewletEntries.descQueue[i]);
+            viewletModel->viewletEntries.descQueue[i]->setObjectName("descWidget");
+            */
+            /*
+            viewletDisplayLayout->addWidget(viewletModel->viewletEntries.splitAmountQueue[i]);
+            viewletModel->viewletEntries.splitAmountQueue[i]->setObjectName("splitAmountWidget");
+            */
+        }
+    }
 }
 
 void
@@ -51,44 +98,7 @@ ViewletView::loadAccountsTreeComboBox(AccountListModel * const m_accountsListMod
     comboAccountsList->setModel(accountsList);
 }
 
-void
-ViewletView::createViewlet()
-{
-    if(comboAccountsList->currentIndex())
-    {
-        selectedAccountIndex = comboAccountsList->currentIndex();
-        selectedAccount = accountsList->at(selectedAccountIndex);
-
-        processViewlet();
-        drawViewletLayout();
-    }
-}
-
-void
-ViewletView::processViewlet()
-{
-    viewletModel->updateViewlet(selectedAccount);
-}
-
-void
-ViewletView::drawViewletLayout()
-{
-    int numOfDates = viewletModel->viewletEntries.datesQueue.count();
-    for (int i = 0; i < numOfDates; ++i)
-    {
-        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.datesQueue[i]);
-        viewletModel->viewletEntries.datesQueue[i]->setObjectName("dateWidget");
-        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.accountsQueue[i]);
-        viewletModel->viewletEntries.accountsQueue[i]->setObjectName("accountWidget");
-        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.descQueue[i]);
-        viewletModel->viewletEntries.descQueue[i]->setObjectName("descWidget");
-        /*
-        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.splitAmountQueue[i]);
-        viewletModel->viewletEntries.splitAmountQueue[i]->setObjectName("splitAmountWidget");
-        */
-    }
-}
-
+#if 0
 void
 ViewletView::removeViewletWidgets()
 {
@@ -115,6 +125,8 @@ ViewletView::removeViewletWidgets()
     }
     */
 }
+#endif
+
 
 /***** Slots *****/
 
@@ -124,9 +136,37 @@ ViewletView::updateViewlet()
     selectedAccountIndex = comboAccountsList->currentIndex();
     selectedAccount = accountsList->at(selectedAccountIndex);
 
-    removeViewletWidgets();
-    processViewlet();
-    drawViewletLayout();
+    //removeViewletWidgets();
+
+    // processViewlet
+    viewletModel->updateViewlet(selectedAccount);
+
+    // drawviewlet
+
+    int numOfDates = viewletModel->queueDefaultEntries.count();
+    for (int i = 0; i < numOfDates; ++i)
+    {
+        //structDefaultViewletEntries tempEntry = viewletModel->queueDefaultEntries.at(i);
+        viewletModel->tempEntry = viewletModel->queueDefaultEntries.at(i);
+
+        QLabel *lblTxnDescription = new QLabel();
+        lblTxnDescription->setText(viewletModel->tempEntry.txnDescription);
+        viewletDisplayLayout->addWidget(lblTxnDescription);
+        lblTxnDescription->setObjectName("descWidget");
+
+       //LEFT OFF HERE now work on removeViewletWidgets
+
+        /*
+        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.accountsQueue[i]);
+        viewletModel->viewletEntries.accountsQueue[i]->setObjectName("accountWidget");
+        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.descQueue[i]);
+        viewletModel->viewletEntries.descQueue[i]->setObjectName("descWidget");
+        */
+        /*
+        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.splitAmountQueue[i]);
+        viewletModel->viewletEntries.splitAmountQueue[i]->setObjectName("splitAmountWidget");
+        */
+    }
 }
 
 } // END namespace gnc
