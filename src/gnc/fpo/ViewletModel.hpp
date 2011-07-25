@@ -26,8 +26,6 @@ public:
 
     void updateViewlet(::Account * selectedAccount);
 
-
-
     //depre
     struct structViewletEntries
     {
@@ -48,26 +46,6 @@ public:
     structDefaultViewletEntries tempEntry;
 
     QQueue<structDefaultViewletEntries> queueDefaultEntries;
-
-private:
-    //depre
-    QString getAccountName(::Split * split) {
-        return QString::fromUtf8(::xaccSplitGetCorrAccountName(split)); }
-    QString getReconciliationStatus(::Split * split) {
-        return static_cast< QString const>(::xaccSplitGetReconcile(split)); }
-    QString getDescription(::Split * split) {
-        ::Transaction *txn = xaccSplitGetParent(split);
-        return QString::fromUtf8(::xaccTransGetDescription(txn)); }
-    QDate getDatePosted(::Split * split) {
-        ::Transaction *txn = ::xaccSplitGetParent(split);
-        return toQDate(::xaccTransGetDatePostedGDate(txn)); }
-    inline QDate toQDate(const ::GDate& d)
-    {
-        if (g_date_valid(&d))
-            return QDate(g_date_year(&d), g_date_month(&d), g_date_day(&d));
-        else
-            return QDate();
-    }
 };
 
 } // END namespace gnc

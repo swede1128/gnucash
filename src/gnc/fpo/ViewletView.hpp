@@ -46,16 +46,10 @@ private:
     /* so that update viewlet can use it to dynamically generate */
     QVBoxLayout *viewletDisplayLayout;
 
-    /** @combofix */
-    QComboBox * comboAccountsList;    
+    QList<QWidget *> viewletWidgetsList;
 
-    struct structDefaultViewletEntries
-    {
-        QDate txnDate;
-        QString splitAccount;
-        QString txnDescription;
-        QString splitAmount;
-    };
+    /** @bugid_1 */
+    QComboBox * comboAccountsList;    
 
     /** @todo */
     SplitList * pSplitList;

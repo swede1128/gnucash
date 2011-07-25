@@ -35,7 +35,7 @@ ViewletView::setDefaultViewlet(QWidget *parent, QHBoxLayout *FPOLayout)
        This default viewlet contains two widgets, 1) An account
        selection widget, and 2) A scroll area which wraps a QWidget
        to show the entries.*/
-    /** @combofix 1) Account selection feature of the viewlet  */
+    /** @bugid_1 1) Account selection feature of the viewlet  */
     /*
     comboAccountsList = new QComboBox();
     comboAccountsList->addItem(tr("-NA-"));
@@ -60,34 +60,7 @@ ViewletView::setDefaultViewlet(QWidget *parent, QHBoxLayout *FPOLayout)
         selectedAccountIndex = comboAccountsList->currentIndex();
         selectedAccount = accountsList->at(selectedAccountIndex);
 
-        // processViewlet
-        viewletModel->updateViewlet(selectedAccount);
-
-        // drawviewlet
-        int numOfDates = viewletModel->queueDefaultEntries.count();
-        for (int i = 0; i < numOfDates; ++i)
-        {
-            //structDefaultViewletEntries tempEntry = viewletModel->queueDefaultEntries.at(i);
-            viewletModel->tempEntry = viewletModel->queueDefaultEntries.at(i);
-            QLabel *lblTxnDescription = new QLabel();
-
-            lblTxnDescription->setText(viewletModel->tempEntry.txnDescription);
-            viewletDisplayLayout->addWidget(lblTxnDescription);
-            lblTxnDescription->setObjectName("descWidget");
-
-           //LEFT OFF HERE now work on removeViewletWidgets
-
-            /*
-            viewletDisplayLayout->addWidget(viewletModel->viewletEntries.accountsQueue[i]);
-            viewletModel->viewletEntries.accountsQueue[i]->setObjectName("accountWidget");
-            viewletDisplayLayout->addWidget(viewletModel->viewletEntries.descQueue[i]);
-            viewletModel->viewletEntries.descQueue[i]->setObjectName("descWidget");
-            */
-            /*
-            viewletDisplayLayout->addWidget(viewletModel->viewletEntries.splitAmountQueue[i]);
-            viewletModel->viewletEntries.splitAmountQueue[i]->setObjectName("splitAmountWidget");
-            */
-        }
+        drawViewlet();
     }
 }
 
@@ -98,34 +71,31 @@ ViewletView::loadAccountsTreeComboBox(AccountListModel * const m_accountsListMod
     comboAccountsList->setModel(accountsList);
 }
 
-#if 0
 void
 ViewletView::removeViewletWidgets()
 {
-    foreach (QWidget *w, viewletModel->viewletEntries.datesQueue)
+    //LEFT OFF HERE work on the iterator to make removing widgets workale
+    int numOfWidgets = viewletWidgetsList.count();
+    qDebug() <<numOfWidgets;
+
+    for (int i=0; i<numOfWidgets; ++i)
     {
-            w->hide();
-            viewletDisplayLayout->removeWidget(w);
+        QWidget *wdg = viewletWidgetsList.at(i);
+        wdg->hide();
+        viewletDisplayLayout->removeWidget(wdg);
     }
-    foreach (QWidget *w, viewletModel->viewletEntries.accountsQueue)
-    {
-        w->hide();
-        viewletDisplayLayout->removeWidget(w);
-    }
-    foreach (QWidget *w, viewletModel->viewletEntries.descQueue)
-    {
-        w->hide();
-        viewletDisplayLayout->removeWidget(w);
-    }
+    viewletWidgetsList.clear();
+    viewletWidgetsList.removeAt(0);
+
+    qDebug() <<"After clear " <<numOfWidgets;
     /*
-    foreach (QWidget *w, viewletModel->viewletEntries.splitAmountQueue)
+    foreach (QWidget *w, viewletWidgetsList)
     {
-        w->hide();
-        viewletDisplayLayout->removeWidget(w);
-    }
-    */
+        viewletWidgetsList.dequeue(w);
+        //w->hide();
+        //viewletDisplayLayout->removeWidget(w);
+    }*/
 }
-#endif
 
 
 /***** Slots *****/
@@ -136,36 +106,34 @@ ViewletView::updateViewlet()
     selectedAccountIndex = comboAccountsList->currentIndex();
     selectedAccount = accountsList->at(selectedAccountIndex);
 
-    //removeViewletWidgets();
+    removeViewletWidgets();
 
-    // processViewlet
+    drawViewlet();
+
+}
+
+void
+ViewletView::drawViewlet()
+{
+    /* Update the queueDefaultEntries struct in ViewletModel with new data */
     viewletModel->updateViewlet(selectedAccount);
 
-    // drawviewlet
-
-    int numOfDates = viewletModel->queueDefaultEntries.count();
-    for (int i = 0; i < numOfDates; ++i)
+    int numOfTransactions = viewletModel->queueDefaultEntries.count();
+    for (int i = 0; i < numOfTransactions; ++i)
     {
-        //structDefaultViewletEntries tempEntry = viewletModel->queueDefaultEntries.at(i);
+        /* Description */
         viewletModel->tempEntry = viewletModel->queueDefaultEntries.at(i);
-
         QLabel *lblTxnDescription = new QLabel();
         lblTxnDescription->setText(viewletModel->tempEntry.txnDescription);
         viewletDisplayLayout->addWidget(lblTxnDescription);
+        /* Use this QList to store all the widgets generated for
+           this account, so when the user chooses a different
+           account, a new viewlet could be drawn by first removing
+           these old widgets.
+        */
+        viewletWidgetsList.append(lblTxnDescription);
+        /* Used as ID by QStyleSheet */
         lblTxnDescription->setObjectName("descWidget");
-
-       //LEFT OFF HERE now work on removeViewletWidgets
-
-        /*
-        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.accountsQueue[i]);
-        viewletModel->viewletEntries.accountsQueue[i]->setObjectName("accountWidget");
-        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.descQueue[i]);
-        viewletModel->viewletEntries.descQueue[i]->setObjectName("descWidget");
-        */
-        /*
-        viewletDisplayLayout->addWidget(viewletModel->viewletEntries.splitAmountQueue[i]);
-        viewletModel->viewletEntries.splitAmountQueue[i]->setObjectName("splitAmountWidget");
-        */
     }
 }
 
