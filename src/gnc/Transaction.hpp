@@ -94,7 +94,6 @@ public:
     void setDatePosted(const QDate& d) { xaccTransSetDate(get(), d.day(), d.month(), d.year()); }
     void setDateEntered(const QDateTime& t) { xaccTransSetDateEnteredSecs(get(), t.toTime_t()); }
     QDate getDatePosted() const { return toQDate(xaccTransGetDatePostedGDate(get())); }
-    GDate getGDatePosted() const { return xaccTransGetDatePostedGDate(get()); }
     QDateTime getDateEntered() const { return toQDateTime(xaccTransRetDateEnteredTS(get())); }
 
     static element_type* newInstance(const Book& b);

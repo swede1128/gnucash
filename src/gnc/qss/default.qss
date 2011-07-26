@@ -36,3 +36,12 @@ border-radius: 5px;
 border-color: beige;
 padding: 2px;
 }
+
+#amountWidget {
+background-color: #F0F7F0;
+border-style: outset;
+border-width: 1px;
+border-radius: 5px;
+border-color: beige;
+padding: 2px;
+}

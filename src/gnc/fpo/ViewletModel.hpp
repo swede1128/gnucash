@@ -28,7 +28,7 @@ public:
 
     struct structViewletEntries
     {
-        QDate txnDate;
+        QString txnDate;
         QString splitAccount;
         QString txnDescription;
         QString splitAmount;

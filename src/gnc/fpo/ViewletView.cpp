@@ -87,26 +87,17 @@ ViewletView::defaultVDraw()
     {
         viewletModel->tempEntry = viewletModel->queueEntries.at(i);
 
-        txnDescription = viewletModel->tempEntry.txnDescription;
-        setLabel(txnDescription, "descWidget", defaultVLayout);
+        txnDate = viewletModel->tempEntry.txnDate;
+        setLabel(txnDate, "dateWidget", defaultVLayout);
 
         splitAccount = viewletModel->tempEntry.splitAccount;
         setLabel(splitAccount, "accountWidget", defaultVLayout);
 
-#if 0
-        QLabel *lblTxnDescription = new QLabel();
-        lblTxnDescription->setText(viewletModel->tempEntry.txnDescription);
-        defaultVLayout->addWidget(lblTxnDescription);
-        /* Use this QList to store all the widgets generated for
-           this account, so when the user chooses a different
-           account, a new viewlet could be drawn by first removing
-           these old widgets.
-        */
-        viewletWidgetsList.append(lblTxnDescription);
+        txnDescription = viewletModel->tempEntry.txnDescription;
+        setLabel(txnDescription, "descWidget", defaultVLayout);
 
-        lblTxnDescription->setObjectName("descWidget");
-#endif
-
+        splitAmount = viewletModel->tempEntry.splitAmount;
+        setLabel(splitAmount, "amountWidget", defaultVLayout);
 
         qDebug()<<"for loop iter "<<viewletWidgetsList.count();
     }
@@ -119,8 +110,8 @@ ViewletView::defaultVRemoveWidgets()
     int numOfWidgets = viewletWidgetsList.count();
     for (int i=0; i<numOfWidgets; ++i)
     {
-        QWidget *wdg = viewletWidgetsList.at(i);
-        delete wdg;
+        //QWidget *wdg = viewletWidgetsList.at(i);
+        delete viewletWidgetsList.at(i);
     }
 
     /* Empty the data structures */
@@ -138,10 +129,6 @@ ViewletView::setLabel(QString data, QString objectName, QVBoxLayout *layout)
     layout->addWidget(lbl);
     /* Used as CSS ID by QStyleSheet */
     lbl->setObjectName(objectName);
-    /* Use this list to store all the widgets generated for
-       this viewlet, so when the viewlet updates, a new viewlet could
-       be drawn by first removing the old widgets in this list.
-    */
     viewletWidgetsList.append(lbl);
 }
 
