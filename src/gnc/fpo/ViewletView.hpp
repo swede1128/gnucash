@@ -58,6 +58,7 @@ private:
 
     /* Methods */
     void removeViewletWidgets();
+    void drawViewlet();
 
 private slots:
     void updateViewlet();

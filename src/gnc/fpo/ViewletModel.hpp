@@ -26,16 +26,6 @@ public:
 
     void updateViewlet(::Account * selectedAccount);
 
-    //depre
-    struct structViewletEntries
-    {
-        QQueue<QWidget *> datesQueue;
-        //QQueue<bool> isNewDateQueue;
-        QQueue<QWidget *> accountsQueue;
-        QQueue<QWidget *> descQueue;
-        QQueue<QWidget *> splitAmountQueue;
-    } viewletEntries;
-
     struct structDefaultViewletEntries
     {
         QDate txnDate;
