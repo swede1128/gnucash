@@ -12,7 +12,7 @@ FPO::FPO(QWidget *parent, QHBoxLayout *FPOLayout) :
 {
     /* Default viewlet */
     defaultViewlet = new ViewletView(parent, FPOLayout);
-    defaultViewlet->setDefaultViewlet(parent, FPOLayout);
+    defaultViewlet->defaultVSet(parent, FPOLayout);
 
     /* Test another viewlet */
     //anotherViewlet = new ViewletView(parent, FPOLayout);

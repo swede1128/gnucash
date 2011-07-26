@@ -26,16 +26,18 @@ public:
 
     void updateViewlet(::Account * selectedAccount);
 
-    struct structDefaultViewletEntries
+    struct structViewletEntries
     {
         QDate txnDate;
         QString splitAccount;
         QString txnDescription;
         QString splitAmount;
     };
-    structDefaultViewletEntries tempEntry;
+    structViewletEntries tempEntry;
+    QQueue<structViewletEntries> queueEntries;
 
-    QQueue<structDefaultViewletEntries> queueDefaultEntries;
+private:
+
 };
 
 } // END namespace gnc

@@ -19,8 +19,7 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
     SplitList * splitL = static_cast<SplitList *>(::xaccAccountGetSplitList(selectedAccount));
     SplitQList splitList = Split::fromGList(splitL);
     int numOfSplits = splitList.count();
-    Split split;    
-    //QDate storedDate;
+    Split split;
     int i;
 
     /* Second implementation
@@ -32,20 +31,19 @@ ViewletModel::updateViewlet(::Account * selectedAccount)
         split = splitList.at(i);
         Transaction trans = split.getParent();
 
-        structDefaultViewletEntries entry;
+        structViewletEntries entry;
 
         entry.txnDate = trans.getDatePosted();
         entry.splitAccount = split.getCorrAccountName();
         entry.txnDescription = trans.getDescription();
 
-        queueDefaultEntries.enqueue(entry);
+        queueEntries.enqueue(entry);
 
         /* used by view */
-        structDefaultViewletEntries tempEntry = queueDefaultEntries.at(i);
+        structViewletEntries tempEntry = queueEntries.at(i);
 
         qDebug()<<"Account: "<<tempEntry.splitAccount;
         qDebug()<<"Description: "<<tempEntry.txnDescription;
     }
 }
-
 } // END namespace gnc
