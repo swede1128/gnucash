@@ -80,18 +80,24 @@ ViewletView::defaultVDraw()
     /* Update the struct in ViewletModel with data from the selected
        account
     */
-    viewletModel->updateViewlet(selectedAccount);
+    viewletModel->defaultVGenerate(selectedAccount);
 
     int numOfTransactions = viewletModel->queueEntries.count();
     for (int i = 0; i < numOfTransactions; ++i)
     {
         viewletModel->tempEntry = viewletModel->queueEntries.at(i);
 
-        txnDate = viewletModel->tempEntry.txnDate;
-        setLabel(txnDate, "dateWidget", defaultVLayout);
+        if(!viewletModel->tempEntry.isDateEqual)
+        {
+            txnDate = viewletModel->tempEntry.txnDate;
+            setLabel(txnDate, "dateWidget", defaultVLayout);
+        }
 
-        splitAccount = viewletModel->tempEntry.splitAccount;
-        setLabel(splitAccount, "accountWidget", defaultVLayout);
+        if(!viewletModel->tempEntry.isSplitAccountEqual)
+        {
+            splitAccount = viewletModel->tempEntry.splitAccount;
+            setLabel(splitAccount, "accountWidget", defaultVLayout);
+        }
 
         txnDescription = viewletModel->tempEntry.txnDescription;
         setLabel(txnDescription, "descWidget", defaultVLayout);

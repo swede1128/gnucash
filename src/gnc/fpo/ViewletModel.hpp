@@ -23,13 +23,14 @@ class ViewletModel
 {
 public:
     ViewletModel();
-
-    void updateViewlet(::Account * selectedAccount);
+    void defaultVGenerate(::Account * selectedAccount);
 
     struct structViewletEntries
     {
         QString txnDate;
+        bool isDateEqual;
         QString splitAccount;
+        bool isSplitAccountEqual;
         QString txnDescription;
         QString splitAmount;
     };
@@ -37,6 +38,8 @@ public:
     QQueue<structViewletEntries> queueEntries;
 
 private:
+    SplitQList buildSplitListDateSort(::Account *selectedAccount);
+    void buildMiniJournalStruct(SplitQList splitList);
 
 };
 
