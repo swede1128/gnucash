@@ -66,6 +66,75 @@ ViewletView::defaultVSet(QWidget *parent, QHBoxLayout *FPOLayout)
     }
 }
 
+void
+ViewletView::leftVSet(QWidget *parent, QHBoxLayout *FPOLayout)
+{
+
+    connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(leftVUpdate()));
+
+    QWidget *viewletContainer = new QWidget;
+    FPOLayout->addWidget(viewletContainer);
+
+    QVBoxLayout *vLay = new QVBoxLayout;
+    viewletContainer->setLayout(vLay);
+
+    /* The actual viewlet display of account(s) chosen*/
+    QWidget *defaultViewletWidget = new QWidget();
+    defaultVLayout = new QVBoxLayout();
+    QScrollArea *viewletScrollArea = new QScrollArea();
+
+    viewletScrollArea->setWidget(defaultViewletWidget);
+    viewletScrollArea->setAlignment(Qt::AlignLeft);
+    viewletScrollArea->setWidgetResizable(true);
+    defaultViewletWidget->setLayout(defaultVLayout);
+    vLay->addWidget(viewletScrollArea);
+
+    //create viewlet
+    if(comboAccountsList->currentIndex())
+    {
+        selectedAccountIndex = comboAccountsList->currentIndex();
+        selectedAccount = accountsList->at(selectedAccountIndex);
+
+        defaultVDraw();
+    }
+}
+
+#if 0
+void
+ViewletView::rightVSet(QWidget *parent, QHBoxLayout *FPOLayout)
+{
+    connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(rightVUpdate()));
+
+    QWidget *viewletContainer = new QWidget;
+    FPOLayout->addWidget(viewletContainer);
+
+    QVBoxLayout *vLay = new QVBoxLayout;
+    viewletContainer->setLayout(vLay);
+
+    /* The actual viewlet display of account(s) chosen */
+    QWidget *defaultViewletWidget = new QWidget();
+    defaultVLayout = new QVBoxLayout();
+    QScrollArea *viewletScrollArea = new QScrollArea();
+
+    viewletScrollArea->setWidget(defaultViewletWidget);
+    viewletScrollArea->setAlignment(Qt::AlignLeft);
+    viewletScrollArea->setWidgetResizable(true);
+    defaultViewletWidget->setLayout(defaultVLayout);
+    vLay->addWidget(viewletScrollArea);
+
+    //create viewlet
+    if(comboAccountsList->currentIndex())
+    {
+        selectedAccountIndex = comboAccountsList->currentIndex();
+        selectedAccount = accountsList->at(selectedAccountIndex);
+
+        defaultVDraw();
+    }
+}
+#endif
+
 /***** Private *****/
 
 /** Create the widgets for the viewlet entries
@@ -87,23 +156,56 @@ ViewletView::defaultVDraw()
     {
         viewletModel->tempEntry = viewletModel->queueEntries.at(i);
 
+        QVBoxLayout *accountLayout;
+
         if(!viewletModel->tempEntry.isDateEqual)
         {
+            QWidget *dateLevelContainer = new QWidget();
+            QVBoxLayout *dateLayout = new QVBoxLayout;
+            dateLevelContainer->setLayout(dateLayout);
+            //viewletWidgetsList.append(dateLevelContainer);
+
+            defaultVLayout->addWidget(dateLevelContainer);
+
             txnDate = viewletModel->tempEntry.txnDate;
-            setLabel(txnDate, "dateWidget", defaultVLayout);
+            setLabel(txnDate, "dateWidget", dateLayout);
+
+            QWidget *accountLevelContainer = new QWidget();
+            accountLayout = new QVBoxLayout;
+            accountLevelContainer->setLayout(accountLayout);
+            dateLayout->addWidget(accountLevelContainer);
+            //viewletWidgetsList.append(accountLevelContainer);
         }
 
+        QVBoxLayout *descriptionAmountLayout;
         if(!viewletModel->tempEntry.isSplitAccountEqual)
         {
+            QWidget *singleAccountLevelContainer = new QWidget();
+            QVBoxLayout *singleAccountLayout = new QVBoxLayout();
+            singleAccountLevelContainer->setLayout(singleAccountLayout);
+            //viewletWidgetsList.append(singleAccountLevelContainer);
+
+            accountLayout->addWidget(singleAccountLevelContainer);
+
+            // 1
             splitAccount = viewletModel->tempEntry.splitAccount;
-            setLabel(splitAccount, "accountWidget", defaultVLayout);
+            setLabel(splitAccount, "accountWidget", singleAccountLayout);
+
+            QWidget *descriptionAmountLevelContainer = new QWidget();
+            descriptionAmountLayout = new QVBoxLayout();
+            descriptionAmountLevelContainer->setLayout(descriptionAmountLayout);
+            //viewletWidgetsList.append(descriptionAmountLevelContainer);
+
+            // 2
+            singleAccountLayout->addWidget(descriptionAmountLevelContainer);
+
         }
 
         txnDescription = viewletModel->tempEntry.txnDescription;
-        setLabel(txnDescription, "descWidget", defaultVLayout);
+        setLabel(txnDescription, "descWidget", descriptionAmountLayout);
 
         splitAmount = viewletModel->tempEntry.splitAmount;
-        setLabel(splitAmount, "amountWidget", defaultVLayout);
+        setLabel(splitAmount, "amountWidget", descriptionAmountLayout);
 
         qDebug()<<"for loop iter "<<viewletWidgetsList.count();
     }
@@ -156,6 +258,22 @@ ViewletView::defaultVUpdate()
     defaultVRemoveWidgets();
     defaultVDraw();
 }
+
+void
+ViewletView::leftVUpdate()
+{
+    defaultVRemoveWidgets();
+    defaultVDraw();
+}
+
+/*
+void
+ViewletView::rightVUpdate()
+{
+    defaultVRemoveWidgets();
+    defaultVDraw();
+}
+*/
 
 } // END namespace gnc
 

@@ -16,10 +16,9 @@ class FPO : public QWidget
     Q_OBJECT
 public:
     explicit FPO(QWidget *parent = 0, QHBoxLayout *FPOLayout = NULL);
+    ViewletView *leftViewlet;
+    ViewletView *rightViewlet;
     ViewletView *defaultViewlet;
-
-    //test
-    ViewletView *anotherViewlet;
 
 signals:
 

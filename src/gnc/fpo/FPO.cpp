@@ -10,6 +10,14 @@ namespace gnc
 FPO::FPO(QWidget *parent, QHBoxLayout *FPOLayout) :
     QWidget(parent)
 {
+    /* Left viewlet */
+    leftViewlet = new ViewletView(parent, FPOLayout);
+    leftViewlet->defaultVSet(parent, FPOLayout);
+
+    /* Right viewlet */
+    rightViewlet = new ViewletView(parent, FPOLayout);
+    rightViewlet->defaultVSet(parent, FPOLayout);
+
     /* Default viewlet */
     defaultViewlet = new ViewletView(parent, FPOLayout);
     defaultViewlet->defaultVSet(parent, FPOLayout);

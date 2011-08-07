@@ -18,6 +18,36 @@ ViewletModel::defaultVGenerate(::Account *selectedAccount)
     buildMiniJournalStruct(splitList);
 }
 
+void
+ViewletModel::leftVGenerate()
+{
+    ::Account *rootAccount = gnc_get_current_root_account();
+    GList *accountsGList = gnc_account_get_descendants(rootAccount);
+    AccountQList accountsList = Account::fromGList(accountsGList);
+
+    int numOfAccounts = accountsList.count();
+    for(int i = 0; i < numOfAccounts; i++)
+    {
+        GType tempAcctType = gnc_account_get_type();
+        //ACCT_TYPE_INCOME = 8, ACCT_TYPE_EXPENSE = 9
+        if(tempAcctType == 9)
+        {
+            qDebug()<<"its an expense account" <<i;
+        }
+        else
+            qDebug()<<"NO not an expense";
+    }
+
+}
+
+/*
+void
+ViewletModel::rightVGenerate()
+{
+    SplitQList splitList = buildSplitListDateSort(selectedAccount);
+    buildMiniJournalStruct(splitList);
+}
+*/
 #if 0
 
     /* get all transactions earlier than the specified date */

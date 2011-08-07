@@ -80,7 +80,7 @@ private:
 
 private slots:
     void defaultVUpdate();
-    //void leftVUpdate();
+    void leftVUpdate();
     //void rightVUpdate();
 };
 

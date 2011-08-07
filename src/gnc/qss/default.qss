@@ -1,5 +1,5 @@
 #dateWidget {
-background-color: #C2C2C2;
+background-color: #FAA0A0;
 color:black;
 border-style: outset;
 border-width: 1px;
@@ -15,7 +15,7 @@ padding: 2px;
 }
 
 #accountWidget {
-background-color: #E0E0E0;
+background-color: #A0A1FA;
 border-style: outset;
 border-width: 1px;
 border-radius: 5px;
@@ -30,6 +30,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 0.5, y2: 0.5,
 }
 
 #descWidget {
+background-color: #A9FAA0;
 border-style: outset;
 border-width: 1px;
 border-radius: 5px;

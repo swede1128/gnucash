@@ -24,6 +24,8 @@ class ViewletModel
 public:
     ViewletModel();
     void defaultVGenerate(::Account * selectedAccount);
+    void leftVGenerate();
+    //void rightVGenerate();
 
     struct structViewletEntries
     {
