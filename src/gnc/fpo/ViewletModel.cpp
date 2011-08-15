@@ -26,9 +26,16 @@ ViewletModel::leftVGenerate()
     AccountQList accountsList = Account::fromGList(accountsGList);
 
     int numOfAccounts = accountsList.count();
+    qDebug()<<numOfAccounts;
     for(int i = 0; i < numOfAccounts; i++)
     {
-        GType tempAcctType = gnc_account_get_type();
+        qDebug()<< "this is" <<xaccAccountGetType(accountsList.at(i));
+        if(xaccAccountGetType(accountsList.at(i)) == 9)
+        {
+            qDebug() << "It is 9";
+        }
+
+        /*GType tempAcctType = gnc_account_get_type();
         //ACCT_TYPE_INCOME = 8, ACCT_TYPE_EXPENSE = 9
         if(tempAcctType == 9)
         {
@@ -36,6 +43,7 @@ ViewletModel::leftVGenerate()
         }
         else
             qDebug()<<"NO not an expense";
+        */
     }
 
 }

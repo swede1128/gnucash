@@ -12,7 +12,7 @@ FPO::FPO(QWidget *parent, QHBoxLayout *FPOLayout) :
 {
     /* Left viewlet */
     leftViewlet = new ViewletView(parent, FPOLayout);
-    leftViewlet->defaultVSet(parent, FPOLayout);
+    leftViewlet->leftVSet(parent, FPOLayout);
 
     /* Right viewlet */
     rightViewlet = new ViewletView(parent, FPOLayout);

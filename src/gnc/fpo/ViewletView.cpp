@@ -70,8 +70,8 @@ void
 ViewletView::leftVSet(QWidget *parent, QHBoxLayout *FPOLayout)
 {
 
-    connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(leftVUpdate()));
+    //connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
+          //  this, SLOT(leftVUpdate()));
 
     QWidget *viewletContainer = new QWidget;
     FPOLayout->addWidget(viewletContainer);
@@ -90,14 +90,15 @@ ViewletView::leftVSet(QWidget *parent, QHBoxLayout *FPOLayout)
     defaultViewletWidget->setLayout(defaultVLayout);
     vLay->addWidget(viewletScrollArea);
 
-    //create viewlet
+    /*//create viewlet
     if(comboAccountsList->currentIndex())
     {
         selectedAccountIndex = comboAccountsList->currentIndex();
         selectedAccount = accountsList->at(selectedAccountIndex);
 
         defaultVDraw();
-    }
+    }*/
+    leftVDraw();
 }
 
 #if 0
@@ -209,6 +210,12 @@ ViewletView::defaultVDraw()
 
         qDebug()<<"for loop iter "<<viewletWidgetsList.count();
     }
+}
+
+void
+ViewletView::leftVDraw()
+{
+    viewletModel->leftVGenerate();
 }
 
 void
