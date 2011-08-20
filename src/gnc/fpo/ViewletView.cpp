@@ -62,6 +62,7 @@ ViewletView::defaultVSet(QWidget *parent, QHBoxLayout *FPOLayout)
         selectedAccountIndex = comboAccountsList->currentIndex();
         selectedAccount = accountsList->at(selectedAccountIndex);
 
+        viewletModel->defaultVGenerate(selectedAccount);
         defaultVDraw();
     }
 }
@@ -69,15 +70,25 @@ ViewletView::defaultVSet(QWidget *parent, QHBoxLayout *FPOLayout)
 void
 ViewletView::leftVSet(QWidget *parent, QHBoxLayout *FPOLayout)
 {
+    connect(this, SIGNAL(fileLoaded()),
+            this, SLOT(leftVLoad()));
 
     //connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
           //  this, SLOT(leftVUpdate()));
+
+    //not required. remove after cleaning loadAccountsTreeComboBox()
+    comboAccountsList = new QComboBox();
+    comboAccountsList->addItem(tr("-NA-"));
+
 
     QWidget *viewletContainer = new QWidget;
     FPOLayout->addWidget(viewletContainer);
 
     QVBoxLayout *vLay = new QVBoxLayout;
     viewletContainer->setLayout(vLay);
+
+    QLabel *title = new QLabel(tr("Expense"));
+    vLay->addWidget(title);
 
     /* The actual viewlet display of account(s) chosen*/
     QWidget *defaultViewletWidget = new QWidget();
@@ -98,15 +109,22 @@ ViewletView::leftVSet(QWidget *parent, QHBoxLayout *FPOLayout)
 
         defaultVDraw();
     }*/
-    leftVDraw();
+
 }
 
-#if 0
 void
 ViewletView::rightVSet(QWidget *parent, QHBoxLayout *FPOLayout)
 {
-    connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(rightVUpdate()));
+    connect(this, SIGNAL(fileLoaded()),
+            this, SLOT(rightVLoad()));
+
+    //connect(comboAccountsList, SIGNAL(currentIndexChanged(int)),
+          //  this, SLOT(leftVUpdate()));
+
+    //not required. remove after cleaning loadAccountsTreeComboBox()
+    comboAccountsList = new QComboBox();
+    comboAccountsList->addItem(tr("-NA-"));
+
 
     QWidget *viewletContainer = new QWidget;
     FPOLayout->addWidget(viewletContainer);
@@ -114,7 +132,10 @@ ViewletView::rightVSet(QWidget *parent, QHBoxLayout *FPOLayout)
     QVBoxLayout *vLay = new QVBoxLayout;
     viewletContainer->setLayout(vLay);
 
-    /* The actual viewlet display of account(s) chosen */
+    QLabel *title = new QLabel(tr("Income"));
+    vLay->addWidget(title);
+
+    /* The actual viewlet display of account(s) chosen*/
     QWidget *defaultViewletWidget = new QWidget();
     defaultVLayout = new QVBoxLayout();
     QScrollArea *viewletScrollArea = new QScrollArea();
@@ -125,16 +146,16 @@ ViewletView::rightVSet(QWidget *parent, QHBoxLayout *FPOLayout)
     defaultViewletWidget->setLayout(defaultVLayout);
     vLay->addWidget(viewletScrollArea);
 
-    //create viewlet
+    /*//create viewlet
     if(comboAccountsList->currentIndex())
     {
         selectedAccountIndex = comboAccountsList->currentIndex();
         selectedAccount = accountsList->at(selectedAccountIndex);
 
         defaultVDraw();
-    }
+    }*/
+
 }
-#endif
 
 /***** Private *****/
 
@@ -150,7 +171,7 @@ ViewletView::defaultVDraw()
     /* Update the struct in ViewletModel with data from the selected
        account
     */
-    viewletModel->defaultVGenerate(selectedAccount);
+
 
     int numOfTransactions = viewletModel->queueEntries.count();
     for (int i = 0; i < numOfTransactions; ++i)
@@ -207,15 +228,7 @@ ViewletView::defaultVDraw()
 
         splitAmount = viewletModel->tempEntry.splitAmount;
         setLabel(splitAmount, "amountWidget", descriptionAmountLayout);
-
-        qDebug()<<"for loop iter "<<viewletWidgetsList.count();
     }
-}
-
-void
-ViewletView::leftVDraw()
-{
-    viewletModel->leftVGenerate();
 }
 
 void
@@ -252,6 +265,7 @@ ViewletView::loadAccountsTreeComboBox(AccountListModel * const m_accountsListMod
 {
     accountsList = m_accountsListModel;
     comboAccountsList->setModel(accountsList);
+    emit fileLoaded();
 }
 
 /***** Slots *****/
@@ -263,6 +277,7 @@ ViewletView::defaultVUpdate()
     selectedAccount = accountsList->at(selectedAccountIndex);
 
     defaultVRemoveWidgets();
+    viewletModel->defaultVGenerate(selectedAccount);
     defaultVDraw();
 }
 
@@ -273,14 +288,30 @@ ViewletView::leftVUpdate()
     defaultVDraw();
 }
 
-/*
+void
+ViewletView::leftVLoad()
+{
+    selectedAccount = accountsList->at(1);
+
+    viewletModel->leftVGenerate(selectedAccount);
+    defaultVDraw();
+}
+
 void
 ViewletView::rightVUpdate()
 {
     defaultVRemoveWidgets();
     defaultVDraw();
 }
-*/
+
+void
+ViewletView::rightVLoad()
+{
+    selectedAccount = accountsList->at(1);
+
+    viewletModel->rightVGenerate(selectedAccount);
+    defaultVDraw();
+}
 
 } // END namespace gnc
 

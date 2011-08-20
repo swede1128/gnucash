@@ -2,6 +2,7 @@
 #define FPO_HPP
 
 #include "ViewletView.hpp"
+#include "gnc/Session.hpp"
 
 #include <QWidget>
 #include <QGridLayout>
@@ -20,7 +21,10 @@ public:
     ViewletView *rightViewlet;
     ViewletView *defaultViewlet;
 
+    Session m_session;
+
 signals:
+    void sessionLoaded();
 
 public slots:
 

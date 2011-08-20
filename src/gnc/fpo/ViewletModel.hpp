@@ -15,6 +15,7 @@ extern "C"
 }
 
 #include "gnc/Split.hpp"
+#include "gnc/SplitListModel.hpp"
 
 namespace gnc
 {
@@ -24,8 +25,8 @@ class ViewletModel
 public:
     ViewletModel();
     void defaultVGenerate(::Account * selectedAccount);
-    void leftVGenerate();
-    //void rightVGenerate();
+    void leftVGenerate(::Account * selectedAccount);
+    void rightVGenerate(::Account *selectedAccount);
 
     struct structViewletEntries
     {
@@ -41,6 +42,7 @@ public:
 
 private:
     SplitQList buildSplitListDateSort(::Account *selectedAccount);
+    SplitQList buildSplitListDateSort(AccountQList accountsList);
     void buildMiniJournalStruct(SplitQList splitList);
 
 };

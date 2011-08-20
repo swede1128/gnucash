@@ -543,7 +543,7 @@ void MainWindow::loadFile(const QString &fileName)
         /* Load the tree in combo boxes of dashboard */
         dboard->loadAccountsTreeComboBox(m_accountListModel);
         dboard->fpoWidget->defaultViewlet->loadAccountsTreeComboBox(m_accountListModel);
-        //dboard->fpoWidget->leftViewlet->loadAccountsTreeComboBox(m_accountListModel);
+        dboard->fpoWidget->leftViewlet->loadAccountsTreeComboBox(m_accountListModel);
         dboard->fpoWidget->rightViewlet->loadAccountsTreeComboBox(m_accountListModel);
 
         ui->treeViewTab->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());

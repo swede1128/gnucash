@@ -38,6 +38,7 @@ public:
     void rightVSet(QWidget * parent, QHBoxLayout * FPOLayout);
 
 signals:
+    void fileLoaded();
 
 public slots:
 
@@ -63,25 +64,28 @@ private:
     QComboBox * comboAccountsList;    
 
     /** @todo */
-    SplitList * pSplitList;
+    ::SplitList * pSplitList;
     ::Account * selectedAccount;
     int selectedAccountIndex;
 
-    /* Widget generators */
+    /* Widget generator */
     void setLabel(QString data, QString objectName, QVBoxLayout *layout);
 
     /* Viewlet generator methods */
     void defaultVDraw();
     void defaultVRemoveWidgets();
-    void leftVDraw();
+    //void leftVDraw();
     void leftVRemoveWidgets();
-    void rightVDraw();
+    //void rightVDraw();
     void rightVRemoveWidgets();
 
 private slots:
     void defaultVUpdate();
     void leftVUpdate();
-    //void rightVUpdate();
+    void rightVUpdate();
+
+    void leftVLoad();
+    void rightVLoad();
 };
 
 } // END namespace gnc

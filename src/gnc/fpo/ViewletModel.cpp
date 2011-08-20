@@ -1,7 +1,7 @@
 #include "ViewletModel.hpp"
 #include "gnc/Transaction.hpp"
-#include "gnc/Split.hpp"
-#include "gnc/SplitListModel.hpp"
+#include "gnc/Account.hpp"
+
 #include "gnc/Numeric.hpp"
 
 namespace gnc
@@ -19,43 +19,55 @@ ViewletModel::defaultVGenerate(::Account *selectedAccount)
 }
 
 void
-ViewletModel::leftVGenerate()
+ViewletModel::leftVGenerate(::Account *selectedAccount)
 {
-    ::Account *rootAccount = gnc_get_current_root_account();
+    ::QofBook *book = gnc_account_get_book(selectedAccount);
+    ::Account *rootAccount = gnc_book_get_root_account(book);
+
     GList *accountsGList = gnc_account_get_descendants(rootAccount);
     AccountQList accountsList = Account::fromGList(accountsGList);
 
     int numOfAccounts = accountsList.count();
-    qDebug()<<numOfAccounts;
+    qDebug()<<"Total num of accounts: "<<numOfAccounts;
+
+    AccountQList expenseAccountsList;
     for(int i = 0; i < numOfAccounts; i++)
     {
-        qDebug()<< "this is" <<xaccAccountGetType(accountsList.at(i));
         if(xaccAccountGetType(accountsList.at(i)) == 9)
         {
-            qDebug() << "It is 9";
+            expenseAccountsList.append(accountsList.at(i));
         }
-
-        /*GType tempAcctType = gnc_account_get_type();
-        //ACCT_TYPE_INCOME = 8, ACCT_TYPE_EXPENSE = 9
-        if(tempAcctType == 9)
-        {
-            qDebug()<<"its an expense account" <<i;
-        }
-        else
-            qDebug()<<"NO not an expense";
-        */
     }
 
+    SplitQList splitsList = buildSplitListDateSort(expenseAccountsList);
+    buildMiniJournalStruct(splitsList);
 }
 
-/*
 void
-ViewletModel::rightVGenerate()
+ViewletModel::rightVGenerate(::Account *selectedAccount)
 {
-    SplitQList splitList = buildSplitListDateSort(selectedAccount);
-    buildMiniJournalStruct(splitList);
+    ::QofBook *book = gnc_account_get_book(selectedAccount);
+    ::Account *rootAccount = gnc_book_get_root_account(book);
+
+    GList *accountsGList = gnc_account_get_descendants(rootAccount);
+    AccountQList accountsList = Account::fromGList(accountsGList);
+
+    int numOfAccounts = accountsList.count();
+    qDebug()<<"Total num of accounts: "<<numOfAccounts;
+
+    AccountQList expenseAccountsList;
+    for(int i = 0; i < numOfAccounts; i++)
+    {
+        if(xaccAccountGetType(accountsList.at(i)) == 8)
+        {
+            expenseAccountsList.append(accountsList.at(i));
+        }
+    }
+
+    SplitQList splitsList = buildSplitListDateSort(expenseAccountsList);
+    buildMiniJournalStruct(splitsList);
 }
-*/
+
 #if 0
 
     /* get all transactions earlier than the specified date */
@@ -100,8 +112,32 @@ ViewletModel::rightVGenerate()
 SplitQList
 ViewletModel::buildSplitListDateSort(::Account *selectedAccount)
 {
-    SplitList * splitL = static_cast<SplitList *>(::xaccAccountGetSplitList(selectedAccount));
+    ::SplitList * splitL = ::xaccAccountGetSplitList(selectedAccount);
     return Split::fromGList(splitL);
+}
+
+SplitQList
+ViewletModel::buildSplitListDateSort(AccountQList accountsList)
+{
+    int numOfAccounts = accountsList.count();
+    qDebug() <<"Num of accounts of X TYPE: "<<numOfAccounts;
+
+    SplitQList allSplitsList;
+    for(int i=0; i< numOfAccounts; i++)
+    {
+        ::Account *C_acct = static_cast< ::Account *>(accountsList.at(i));
+        qDebug()<< "THIS"<< gnc_account_get_full_name(C_acct);
+
+        SplitQList tempList = Split::fromGList(::xaccAccountGetSplitList(C_acct));
+
+        int numOfSplits = tempList.count();
+        for(int i=0; i<numOfSplits; i++)
+        {
+            allSplitsList.append(tempList.at(i));
+        }
+    }
+
+    return allSplitsList;
 }
 
 void
