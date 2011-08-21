@@ -63,7 +63,7 @@ Dashboard::~Dashboard()
 }
 
 void
-Dashboard::setDashboardWidgets()
+Dashboard::showDashboardWidgets()
 {
     ui->dockwBasicTxn->show();
     ui->dockwFPO->show();
