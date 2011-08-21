@@ -58,6 +58,7 @@ public:
     FPO *fpoWidget;
     AccountListModel *accountsList;
     void loadAccountsTreeComboBox(AccountListModel * const m_accountListModel);
+    void setDashboardWidgets();
 
 public slots:
     void transferFundsWidgetButtonToggled(bool checked);

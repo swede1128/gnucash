@@ -62,6 +62,13 @@ Dashboard::~Dashboard()
     delete ui;
 }
 
+void
+Dashboard::setDashboardWidgets()
+{
+    ui->dockwBasicTxn->show();
+    ui->dockwFPO->show();
+}
+
 /** Initialise widgets to startup defaults */
 void
 Dashboard::setUiWidgets()

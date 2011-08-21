@@ -121,7 +121,7 @@ MainWindow::MainWindow()
     newFile();
     setUnifiedTitleAndToolBarOnMac(true);
 
-    autoLoadRecentFile();
+    //autoLoadRecentFile();
 }
 
 MainWindow::~MainWindow()
@@ -498,6 +498,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     {
         m_dashboardToolBar->setEnabled(true);
         m_dashboardToolBar->setHidden(false);
+        dboard->setDashboardWidgets();
     }
     else
     {

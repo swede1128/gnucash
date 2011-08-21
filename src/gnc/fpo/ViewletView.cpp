@@ -180,8 +180,8 @@ ViewletView::defaultVDraw()
 
         QVBoxLayout *accountLayout;
 
-        if(!viewletModel->tempEntry.isDateEqual)
-        {
+        //if(!viewletModel->tempEntry.isDateEqual)
+        //{
             QWidget *dateLevelContainer = new QWidget();
             QVBoxLayout *dateLayout = new QVBoxLayout;
             dateLevelContainer->setLayout(dateLayout);
@@ -197,11 +197,11 @@ ViewletView::defaultVDraw()
             accountLevelContainer->setLayout(accountLayout);
             dateLayout->addWidget(accountLevelContainer);
             //viewletWidgetsList.append(accountLevelContainer);
-        }
+        //}
 
         QVBoxLayout *descriptionAmountLayout;
-        if(!viewletModel->tempEntry.isSplitAccountEqual)
-        {
+        //if(!viewletModel->tempEntry.isSplitAccountEqual)
+        //{
             QWidget *singleAccountLevelContainer = new QWidget();
             QVBoxLayout *singleAccountLayout = new QVBoxLayout();
             singleAccountLevelContainer->setLayout(singleAccountLayout);
@@ -221,7 +221,7 @@ ViewletView::defaultVDraw()
             // 2
             singleAccountLayout->addWidget(descriptionAmountLevelContainer);
 
-        }
+        //}
 
         txnDescription = viewletModel->tempEntry.txnDescription;
         setLabel(txnDescription, "descWidget", descriptionAmountLayout);
