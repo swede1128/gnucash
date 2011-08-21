@@ -43,6 +43,7 @@ public:
 private:
     SplitQList buildSplitListDateSort(::Account *selectedAccount);
     SplitQList buildSplitListDateSort(AccountQList accountsList);
+    bool static lessThanByDate(::Split* a, ::Split* b);
     void buildMiniJournalStruct(SplitQList splitList);
 
 };

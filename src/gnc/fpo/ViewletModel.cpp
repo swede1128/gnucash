@@ -136,7 +136,16 @@ ViewletModel::buildSplitListDateSort(AccountQList accountsList)
         }
     }
 
+    qSort(allSplitsList.begin(), allSplitsList.end(), &ViewletModel::lessThanByDate);
     return allSplitsList;
+}
+
+bool
+ViewletModel::lessThanByDate(::Split* a, ::Split* b)
+{
+    ::Transaction* tx_a = xaccSplitGetParent(a);
+    ::Transaction* tx_b = xaccSplitGetParent(b);
+    return xaccTransGetDate(tx_a) < xaccTransGetDate(tx_b);
 }
 
 void
