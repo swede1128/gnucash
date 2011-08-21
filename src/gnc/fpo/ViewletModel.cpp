@@ -126,7 +126,6 @@ ViewletModel::buildSplitListDateSort(AccountQList accountsList)
     for(int i=0; i< numOfAccounts; i++)
     {
         ::Account *C_acct = static_cast< ::Account *>(accountsList.at(i));
-        qDebug()<< "THIS"<< gnc_account_get_full_name(C_acct);
 
         SplitQList tempList = Split::fromGList(::xaccAccountGetSplitList(C_acct));
 

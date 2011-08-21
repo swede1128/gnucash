@@ -190,6 +190,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionViewWelcomepage"/>
     <addaction name="actionViewAccountList"/>
     <addaction name="actionViewAccountTree"/>
+    <addaction name="actionViewDashboard"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -368,6 +369,39 @@ p, li { white-space: pre-wrap; }
   <action name="actionCloseTab">
    <property name="text">
     <string>&amp;Close Current Tab</string>
+   </property>
+  </action>
+  <action name="actionViewDashboard">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Dashboard</string>
+   </property>
+  </action>
+  <action name="actionViewTransferFunds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Transfer Funds</string>
+   </property>
+  </action>
+  <action name="actionViewFPO">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;FPO</string>
    </property>
   </action>
  </widget>

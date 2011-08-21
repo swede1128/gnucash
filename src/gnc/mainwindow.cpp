@@ -87,8 +87,6 @@ MainWindow::MainWindow()
     createStatusBar();
     setIcons();
 
-    /** @todo Create persistent setting to switch between tab
-      * and independent window */
     dboard = new Dashboard(this);
     dboard->setWindowTitle("Dashboard");
     //dboard->show();
@@ -103,6 +101,14 @@ MainWindow::MainWindow()
 
     connect(m_undoStack, SIGNAL(cleanChanged(bool)),
             this, SLOT(documentCleanStateChanged(bool)));
+    connect(m_btnTransferFundsWidget, SIGNAL(toggled(bool)),
+            dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
+    connect(m_btnFPOWidget, SIGNAL(toggled(bool)),
+            dboard, SLOT(FPOWidgetButtonToggled(bool)));
+    connect(this, SIGNAL(dashboardVisible(bool)),
+            dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
+    connect(this, SIGNAL(dashboardVisible(bool)),
+            dboard, SLOT(FPOWidgetButtonToggled(bool)));
 
     setWindowIcon(QIcon(":/pixmaps/gnucash-icon-64x64.png"));
 
@@ -260,6 +266,17 @@ void MainWindow::createToolBars()
     m_editToolBar->addAction(ui->actionCut);
     m_editToolBar->addAction(ui->actionCopy);
     m_editToolBar->addAction(ui->actionPaste);
+
+    m_dashboardToolBar = addToolBar(tr("Dashboard"));
+    m_btnTransferFundsWidget = new QToolButton;
+    m_btnTransferFundsWidget->setCheckable(true);
+    m_dashboardToolBar->addWidget(m_btnTransferFundsWidget);
+    m_btnFPOWidget = new QToolButton;
+    m_btnFPOWidget->setCheckable(true);
+    m_dashboardToolBar->addWidget(m_btnFPOWidget);
+
+    //m_dashboardToolBar->addAction(dboard->getAction());
+    //m_dashboardToolBar->addAction(dboard->ui->dockwBasicTxn->toggleViewAction);
 }
 
 void MainWindow::createStatusBar()
@@ -282,6 +299,8 @@ void MainWindow::setIcons()
     ui->actionSave_as->setIcon(QIcon::fromTheme("document-save-as"));
     ui->actionExit->setIcon(QIcon::fromTheme("window-close"));
     ui->actionAbout->setIcon(QIcon::fromTheme("help-about"));
+    m_btnTransferFundsWidget->setIcon(QIcon::fromTheme("help-about"));
+    m_btnFPOWidget->setIcon(QIcon::fromTheme("help-about"));
 }
 
 void MainWindow::readSettings()
@@ -384,6 +403,13 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         ui->actionViewAccountList->setChecked(false);
         reallyRemoveTab(index);
     }
+    else if (widget == dboard)
+    {
+        ui->actionViewDashboard->setChecked(false);
+        m_dashboardToolBar->setEnabled(false);
+        m_dashboardToolBar->setHidden(true);
+        reallyRemoveTab(index);
+    }
     else
     {
         QVariant prevPos = widget->property(PROPERTY_TAB_PREVIOUSPOS);
@@ -412,6 +438,11 @@ void MainWindow::on_actionViewWelcomepage_triggered(bool checked)
     viewOrHideTab(checked, ui->textBrowserTab);
 }
 
+void MainWindow::on_actionViewDashboard_triggered(bool checked)
+{
+    viewOrHideTab(checked, dboard);
+}
+
 void MainWindow::viewOrHideTab(bool checked, QWidget *widget)
 {
     if (checked)
@@ -430,6 +461,13 @@ void MainWindow::viewOrHideTab(bool checked, QWidget *widget)
         ui->tabWidget->insertTab(tabPosition.toInt(), widget, tabLabel.toString());
         if (tabIsCurrent)
             ui->tabWidget->setCurrentWidget(widget);
+
+        if(widget == dboard)
+        {
+            m_dashboardToolBar->setEnabled(true);
+            m_dashboardToolBar->setHidden(false);
+            emit dashboardVisible(true);
+        }
     }
     else
     {
@@ -455,6 +493,17 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     QWidget *widget = ui->tabWidget->widget(index);
     bool tabWithAccounts = (widget != ui->textBrowserTab);
     ui->menuAccount->setEnabled(tabWithAccounts);
+
+    if(ui->tabWidget->currentWidget() == dboard)
+    {
+        m_dashboardToolBar->setEnabled(true);
+        m_dashboardToolBar->setHidden(false);
+    }
+    else
+    {
+        m_dashboardToolBar->setEnabled(false);
+        m_dashboardToolBar->setHidden(true);
+    }
 }
 
 void MainWindow::accountItemActivated(const QModelIndex & index)
@@ -516,6 +565,12 @@ void MainWindow::on_actionCut_triggered()
     }
 }
 
+/*void MainWindow::processFocussedTab(int index)
+{
+    qDebug()<< index;
+}
+*/
+
 // ////////////////////////////////////////////////////////////
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -573,5 +628,18 @@ void MainWindow::newFile()
         setCurrentFile("");
     }
 }
+
+void MainWindow::dockWidgetsVisibilityChanged(int wdg, bool visible)
+{
+    if(wdg == 0)
+    {
+        m_btnTransferFundsWidget->setChecked(visible);
+    }
+    else if(wdg == 1)
+    {
+        m_btnFPOWidget->setChecked(visible);
+    }
+}
+
 
 } // END namespace gnc

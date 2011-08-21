@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>1049</width>
-     <height>28</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -34,8 +34,8 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>425</width>
-     <height>260</height>
+     <width>200</width>
+     <height>265</height>
     </size>
    </property>
    <property name="baseSize">

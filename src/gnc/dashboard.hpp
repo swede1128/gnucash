@@ -59,6 +59,10 @@ public:
     AccountListModel *accountsList;
     void loadAccountsTreeComboBox(AccountListModel * const m_accountListModel);
 
+public slots:
+    void transferFundsWidgetButtonToggled(bool checked);
+    void FPOWidgetButtonToggled(bool checked);
+
 private:
     Ui::Dashboard *ui;
 
@@ -101,11 +105,12 @@ private:
     void setUiWidgets();
     void setBasicTxnEntryFormLayout();
     void setFPO();
-    void clearFields();
+    void clearFields();   
 
 private slots:
     void on_btnCreateBasicTxn_clicked();
-
+    void on_dockwBasicTxn_visibilityChanged(bool visible);
+    void on_dockwFPO_visibilityChanged(bool visible);
 };
 
 } // END namespace gnc

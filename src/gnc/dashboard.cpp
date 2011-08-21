@@ -218,4 +218,43 @@ Dashboard::on_btnCreateBasicTxn_clicked()
     clearFields();
 }
 
+void
+Dashboard::on_dockwBasicTxn_visibilityChanged(bool visible)
+{
+    ((MainWindow *)parentWidget()->parentWidget()->parentWidget()->parentWidget())->dockWidgetsVisibilityChanged(0, visible);
+}
+
+void
+Dashboard::on_dockwFPO_visibilityChanged(bool visible)
+{
+    ((MainWindow *)parentWidget()->parentWidget()->parentWidget()->parentWidget())->dockWidgetsVisibilityChanged(1, visible);
+}
+
+void
+Dashboard::transferFundsWidgetButtonToggled(bool checked)
+{
+    if(checked)
+    {
+        ui->dockwBasicTxn->show();
+    }
+    else
+    {
+        ui->dockwBasicTxn->hide();
+    }
+}
+
+void
+Dashboard::FPOWidgetButtonToggled(bool checked)
+{
+    if(checked)
+    {
+        ui->dockwFPO->show();
+    }
+    else
+    {
+        ui->dockwFPO->hide();
+    }
+}
+
+
 } // END namespace gnc

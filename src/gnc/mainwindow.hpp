@@ -35,6 +35,7 @@ class QPlainTextEdit;
 class QTextEdit;
 class QTabWidget;
 class QUndoStack;
+class QToolButton;
 
 namespace Ui
 {
@@ -62,6 +63,7 @@ public:
 
     const QString& getCurrentFilename() const { return m_currentFilename; }
     bool hasOpenedFile() const { return !m_currentFilename.isEmpty(); }
+    void dockWidgetsVisibilityChanged(int wdg, bool visible);
 
 public slots:
     void accountItemActivated(const QModelIndex & index);
@@ -70,6 +72,9 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *event);
+
+signals:
+    void dashboardVisible(bool visible);
 
 private slots:
     void newFile();
@@ -85,6 +90,7 @@ private slots:
     void on_actionViewAccountTree_triggered(bool checked);
     void on_actionViewAccountList_triggered(bool checked);
     void on_actionViewWelcomepage_triggered(bool checked);
+    void on_actionViewDashboard_triggered(bool checked);
     void documentWasModified();
     void selectionChanged(const QItemSelection & selected, const QItemSelection & deselected );
 
@@ -125,8 +131,11 @@ private:
 
     QToolBar *m_fileToolBar;
     QToolBar *m_editToolBar;
+    QToolBar *m_dashboardToolBar;
     QAction *m_actionUndo;
     QAction *m_actionRedo;
+    QToolButton *m_btnTransferFundsWidget;
+    QToolButton *m_btnFPOWidget;
     QSharedPointer<RecentFileMenu> m_menuRecentFiles;
     QUndoStack *m_undoStack;
 
