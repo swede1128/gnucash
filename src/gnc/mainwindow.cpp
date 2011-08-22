@@ -103,12 +103,8 @@ MainWindow::MainWindow()
             this, SLOT(documentCleanStateChanged(bool)));
     connect(m_btnTransferFundsWidget, SIGNAL(toggled(bool)),
             dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
-    connect(m_btnFPOWidget, SIGNAL(toggled(bool)),
-            dboard, SLOT(FPOWidgetButtonToggled(bool)));
     connect(this, SIGNAL(dashboardVisible(bool)),
             dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
-    connect(this, SIGNAL(dashboardVisible(bool)),
-            dboard, SLOT(FPOWidgetButtonToggled(bool)));
 
     setWindowIcon(QIcon(":/pixmaps/gnucash-icon-64x64.png"));
 
@@ -271,12 +267,6 @@ void MainWindow::createToolBars()
     m_btnTransferFundsWidget = new QToolButton;
     m_btnTransferFundsWidget->setCheckable(true);
     m_dashboardToolBar->addWidget(m_btnTransferFundsWidget);
-    m_btnFPOWidget = new QToolButton;
-    m_btnFPOWidget->setCheckable(true);
-    m_dashboardToolBar->addWidget(m_btnFPOWidget);
-
-    //m_dashboardToolBar->addAction(dboard->getAction());
-    //m_dashboardToolBar->addAction(dboard->ui->dockwBasicTxn->toggleViewAction);
 }
 
 void MainWindow::createStatusBar()
@@ -300,7 +290,6 @@ void MainWindow::setIcons()
     ui->actionExit->setIcon(QIcon::fromTheme("window-close"));
     ui->actionAbout->setIcon(QIcon::fromTheme("help-about"));
     m_btnTransferFundsWidget->setIcon(QIcon::fromTheme("help-about"));
-    m_btnFPOWidget->setIcon(QIcon::fromTheme("help-about"));
 }
 
 void MainWindow::readSettings()
@@ -634,11 +623,8 @@ void MainWindow::dockWidgetsVisibilityChanged(int wdg, bool visible)
 {
     if(wdg == 0)
     {
+        /** todo: handle tabs */
         m_btnTransferFundsWidget->setChecked(visible);
-    }
-    else if(wdg == 1)
-    {
-        m_btnFPOWidget->setChecked(visible);
     }
 }
 

@@ -135,7 +135,6 @@ private:
     QAction *m_actionUndo;
     QAction *m_actionRedo;
     QToolButton *m_btnTransferFundsWidget;
-    QToolButton *m_btnFPOWidget;
     QSharedPointer<RecentFileMenu> m_menuRecentFiles;
     QUndoStack *m_undoStack;
 

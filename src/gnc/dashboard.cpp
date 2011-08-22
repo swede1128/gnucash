@@ -46,6 +46,7 @@ Dashboard::Dashboard(QWidget *parent) :
     //this->tabifyDockWidget(ui->dockwBasicTxn, ui->dockwSplitTxn);
     //ui->dockwBasicTxn->raise();
     ui->dockwSplitTxn->hide();
+    ui->dockwLogViewer->hide();
 
     /* Set stylesheet, so that some styling to viewlets can be applied */
     /*QFile styleSheetFile(":/qss-default");
@@ -137,8 +138,6 @@ Dashboard::setFPO()
     QHBoxLayout *FPOLayout = new QHBoxLayout;
     ui->dockcFPO->setLayout(FPOLayout);
     fpoWidget = new FPO(ui->dockcFPO, FPOLayout);
-    /* ui->dockwFPO->setAllowedAreas(Qt::LeftDockWidgetArea
-                                  | Qt::RightDockWidgetArea);*/
 }
 
 void
@@ -232,12 +231,6 @@ Dashboard::on_dockwBasicTxn_visibilityChanged(bool visible)
 }
 
 void
-Dashboard::on_dockwFPO_visibilityChanged(bool visible)
-{
-    ((MainWindow *)parentWidget()->parentWidget()->parentWidget()->parentWidget())->dockWidgetsVisibilityChanged(1, visible);
-}
-
-void
 Dashboard::transferFundsWidgetButtonToggled(bool checked)
 {
     if(checked)
@@ -249,19 +242,5 @@ Dashboard::transferFundsWidgetButtonToggled(bool checked)
         ui->dockwBasicTxn->hide();
     }
 }
-
-void
-Dashboard::FPOWidgetButtonToggled(bool checked)
-{
-    if(checked)
-    {
-        ui->dockwFPO->show();
-    }
-    else
-    {
-        ui->dockwFPO->hide();
-    }
-}
-
 
 } // END namespace gnc

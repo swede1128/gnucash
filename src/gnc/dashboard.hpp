@@ -62,7 +62,6 @@ public:
 
 public slots:
     void transferFundsWidgetButtonToggled(bool checked);
-    void FPOWidgetButtonToggled(bool checked);
 
 private:
     Ui::Dashboard *ui;
@@ -111,7 +110,6 @@ private:
 private slots:
     void on_btnCreateBasicTxn_clicked();
     void on_dockwBasicTxn_visibilityChanged(bool visible);
-    void on_dockwFPO_visibilityChanged(bool visible);
 };
 
 } // END namespace gnc
