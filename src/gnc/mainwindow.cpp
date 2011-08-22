@@ -117,7 +117,7 @@ MainWindow::MainWindow()
     newFile();
     setUnifiedTitleAndToolBarOnMac(true);
 
-    //autoLoadRecentFile();
+    autoLoadRecentFile();
 }
 
 MainWindow::~MainWindow()
@@ -264,6 +264,7 @@ void MainWindow::createToolBars()
     m_editToolBar->addAction(ui->actionPaste);
 
     m_dashboardToolBar = addToolBar(tr("Dashboard"));
+    m_dashboardToolBar->setObjectName("m_dashboardToolBar");
     m_btnTransferFundsWidget = new QToolButton;
     m_btnTransferFundsWidget->setCheckable(true);
     m_dashboardToolBar->addWidget(m_btnTransferFundsWidget);
@@ -297,8 +298,10 @@ void MainWindow::readSettings()
     QSettings settings;
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(400, 400)).toSize();
-    resize(size);
-    move(pos);
+    //resize(size);
+    //move(pos);
+    restoreState(settings.value("state").toByteArray());
+    restoreGeometry(settings.value("geometry").toByteArray());
     m_menuRecentFiles->readSettings(&settings, "RecentFiles");
 }
 
@@ -317,8 +320,10 @@ void MainWindow::autoLoadRecentFile()
 void MainWindow::writeSettings()
 {
     QSettings settings;
-    settings.setValue("pos", pos());
-    settings.setValue("size", size());
+    //settings.setValue("pos", pos());
+    //settings.setValue("size", size());
+    settings.setValue("state", saveState());
+    settings.setValue("geometry", saveGeometry());
     m_menuRecentFiles->writeSettings(&settings, "RecentFiles");
 }
 

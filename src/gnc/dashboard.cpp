@@ -54,12 +54,34 @@ Dashboard::Dashboard(QWidget *parent) :
     QString styleSheetName = QLatin1String(styleSheetFile.readAll());
     this->setStyleSheet(styleSheetName);*/
 
+    /*
+    QSettings settings;
+    restoreState(settings.value("dashboardState").toByteArray());
+    restoreDockWidget(ui->dockwBasicTxn);
+    */
+
+    // Trying to restore pos and size of dockwidget manually
+    QSettings settings;
+    QPoint bTxnWdgPos = settings.value("basic-txn-entry-dockwidget-pos").toPoint();
+    ui->dockwBasicTxn->move(bTxnWdgPos);
+    QSize bTxnWdgSize = settings.value("basic-txn-entry-dockwidget-size").toSize();
+    ui->dockwBasicTxn->resize(bTxnWdgSize);
+
     connect(btnCreateBasicTxn, SIGNAL(clicked()),
             this, SLOT(on_btnCreateBasicTxn_clicked()));
 }
 
 Dashboard::~Dashboard()
 {
+    /*
+    QSettings settings;
+    settings.setValue("dashboardState", saveState());
+    */
+
+    QSettings settings;
+    settings.setValue("basic-txn-entry-dockwidget-pos", ui->dockwBasicTxn->pos());
+    settings.setValue("basic-txn-entry-dockwidget-size", ui->dockwBasicTxn->size());
+
     delete ui;
 }
 
