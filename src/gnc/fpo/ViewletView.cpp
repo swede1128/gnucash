@@ -178,64 +178,87 @@ ViewletView::defaultVDraw()
     {
         viewletModel->tempEntry = viewletModel->queueEntries.at(i);
 
-        QVBoxLayout *accountLayout;
-
-        if(!viewletModel->tempEntry.isDateEqual)
+        //1 & 2
+        if((!viewletModel->tempEntry.isDateEqual && !viewletModel->tempEntry.isSplitAccountEqual)
+            || (!viewletModel->tempEntry.isDateEqual && viewletModel->tempEntry.isSplitAccountEqual))
         {
-            QWidget *dateLevelContainer = new QWidget();
-            QVBoxLayout *dateLayout = new QVBoxLayout;
-            dateLevelContainer->setLayout(dateLayout);
-
-            /* Append the pointer of this top level widget
-              of the viewlet for later removal during update */
-            viewletWidgetContainersList.append(dateLevelContainer);
-
-            defaultVLayout->addWidget(dateLevelContainer, 10, Qt::AlignTop);
-
-            txnDate = viewletModel->tempEntry.txnDate;
-            setLabel(txnDate, "dateWidget", dateLayout);
-
-            QWidget *accountLevelContainer = new QWidget();
-            accountLayout = new QVBoxLayout;
-            accountLevelContainer->setLayout(accountLayout);
-            dateLayout->addWidget(accountLevelContainer);
+            dateCheckOutput();
+            accountCheckOutput();
+            descriptionAmountOutput();
         }
 
-        QVBoxLayout *descriptionAmountLayout;
-        if(!viewletModel->tempEntry.isSplitAccountEqual)
+        //3
+        if(viewletModel->tempEntry.isDateEqual && !viewletModel->tempEntry.isSplitAccountEqual)
         {
-            QWidget *singleAccountLevelContainer = new QWidget();
-            QVBoxLayout *singleAccountLayout = new QVBoxLayout();
-            singleAccountLevelContainer->setLayout(singleAccountLayout);
-
-            accountLayout->addWidget(singleAccountLevelContainer);
-
-            // 1
-            splitAccount = viewletModel->tempEntry.splitAccount;
-            setLabel(splitAccount, "accountWidget", singleAccountLayout);
-
-            QWidget *descriptionAmountLevelContainer = new QWidget();
-            descriptionAmountLayout = new QVBoxLayout();
-            descriptionAmountLevelContainer->setLayout(descriptionAmountLayout);
-
-            // 2
-            singleAccountLayout->addWidget(descriptionAmountLevelContainer);
-
+            accountCheckOutput();
+            descriptionAmountOutput();
         }
 
-        //QString foo = QString::tout (viewletModel->tempEntry.isSplitAccountEqual);
-        txnDescription = viewletModel->tempEntry.txnDescription
-                + " [" + viewletModel->tempEntry.splitAccount + "]"+ " ["
-                + "acctEqual? "
-                + QString(viewletModel->tempEntry.isSplitAccountEqual?"T":"F") + "]";
-        setLabel(txnDescription, "descWidget", descriptionAmountLayout);
-
-        splitAmount = viewletModel->tempEntry.splitAmount
-                + " [" + viewletModel->tempEntry.txnDate + "]" + " ["
-                + "dateEqual? "
-                + QString(viewletModel->tempEntry.isDateEqual?"T":"F") + "]";
-        setLabel(splitAmount, "amountWidget", descriptionAmountLayout);
+        //4
+        if(viewletModel->tempEntry.isDateEqual && viewletModel->tempEntry.isSplitAccountEqual)
+        {
+            descriptionAmountOutput();
+        }
     }
+}
+
+void
+ViewletView::dateCheckOutput()
+{
+    QWidget *dateLevelContainer = new QWidget();
+    QVBoxLayout *dateLayout = new QVBoxLayout;
+    dateLevelContainer->setLayout(dateLayout);
+
+    /* Append the pointer of this top level widget
+      of the viewlet for later removal during update */
+    viewletWidgetContainersList.append(dateLevelContainer);
+
+    defaultVLayout->addWidget(dateLevelContainer, 10, Qt::AlignTop);
+
+    txnDate = viewletModel->tempEntry.txnDate;
+    setLabel(txnDate, "dateWidget", dateLayout);
+
+    QWidget *accountLevelContainer = new QWidget();
+    accountLayout = new QVBoxLayout;
+    accountLevelContainer->setLayout(accountLayout);
+    dateLayout->addWidget(accountLevelContainer);
+}
+
+void
+ViewletView::accountCheckOutput()
+{
+    QWidget *singleAccountLevelContainer = new QWidget();
+    QVBoxLayout *singleAccountLayout = new QVBoxLayout();
+    singleAccountLevelContainer->setLayout(singleAccountLayout);
+
+    accountLayout->addWidget(singleAccountLevelContainer);
+
+    // 1
+    splitAccount = viewletModel->tempEntry.splitAccount;
+    setLabel(splitAccount, "accountWidget", singleAccountLayout);
+
+    QWidget *descriptionAmountLevelContainer = new QWidget();
+    descriptionAmountLayout = new QVBoxLayout();
+    descriptionAmountLevelContainer->setLayout(descriptionAmountLayout);
+
+    // 2
+    singleAccountLayout->addWidget(descriptionAmountLevelContainer);
+}
+
+void
+ViewletView::descriptionAmountOutput()
+{
+    txnDescription = viewletModel->tempEntry.txnDescription
+            + " [" + viewletModel->tempEntry.splitAccount + "]"+ " ["
+            + "acctEqual? "
+            + QString(viewletModel->tempEntry.isSplitAccountEqual?"T":"F") + "]";
+    setLabel(txnDescription, "descWidget", descriptionAmountLayout);
+
+    splitAmount = viewletModel->tempEntry.splitAmount
+            + " [" + viewletModel->tempEntry.txnDate + "]" + " ["
+            + "dateEqual? "
+            + QString(viewletModel->tempEntry.isDateEqual?"T":"F") + "]";
+    setLabel(splitAmount, "amountWidget", descriptionAmountLayout);
 }
 
 void
