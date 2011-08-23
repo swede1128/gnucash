@@ -37,7 +37,8 @@ public:
     void leftVSet(QWidget * parent, QHBoxLayout * FPOLayout);
     void rightVSet(QWidget * parent, QHBoxLayout * FPOLayout);
 
-    void staticVUpdate();
+    void leftVUpdate();
+    void rightVUpdate();
 
 signals:
     void fileLoaded();
@@ -84,8 +85,6 @@ private:
 
 private slots:
     void defaultVUpdate();
-    void leftVUpdate();
-    void rightVUpdate();
 
     void leftVLoad();
     void rightVLoad();

@@ -185,11 +185,13 @@ Dashboard::clearFields()
 void
 Dashboard::transactionEvent( ::Transaction* trans, QofEventId event_type)
 {
-    qDebug() << "Dashboard::transactionEvent, id=" << qofEventToString(event_type);
+    //qDebug() << "Dashboard::transactionEvent, id=" << qofEventToString(event_type);
     switch (event_type)
     {
     case QOF_EVENT_MODIFY:
         // Call refreshViewlet here
+        fpoWidget->leftViewlet->leftVUpdate();
+        fpoWidget->rightViewlet->rightVUpdate();
         break;
     case GNC_EVENT_ITEM_REMOVED:
     case GNC_EVENT_ITEM_ADDED:

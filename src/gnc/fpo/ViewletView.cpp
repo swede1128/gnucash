@@ -174,7 +174,7 @@ ViewletView::defaultVDraw()
 
 
     int numOfTransactions = viewletModel->queueEntries.count();
-    for (int i = 0; i < numOfTransactions; ++i)
+    for (int i = 0; i < numOfTransactions; i++)
     {
         viewletModel->tempEntry = viewletModel->queueEntries.at(i);
 
@@ -223,10 +223,10 @@ ViewletView::defaultVDraw()
 
         }
 
-        txnDescription = viewletModel->tempEntry.txnDescription;
+        txnDescription = viewletModel->tempEntry.txnDescription + " [" + viewletModel->tempEntry.splitAccount + "]";
         setLabel(txnDescription, "descWidget", descriptionAmountLayout);
 
-        splitAmount = viewletModel->tempEntry.splitAmount;
+        splitAmount = viewletModel->tempEntry.splitAmount + " [" + viewletModel->tempEntry.txnDate + "]";
         setLabel(splitAmount, "amountWidget", descriptionAmountLayout);
     }
 }
@@ -236,7 +236,7 @@ ViewletView::defaultVRemoveWidgets()
 {
     /* Remove old widgets. */
     int numOfContainers = viewletWidgetContainersList.count();
-    for (int i=0; i<numOfContainers; ++i)
+    for (int i=0; i<numOfContainers; i++)
     {
         delete viewletWidgetContainersList.at(i);
     }
@@ -280,18 +280,16 @@ ViewletView::defaultVUpdate()
     defaultVDraw();
 }
 
-void
-ViewletView::staticVUpdate()
-{
-    //Call this in dboard gnc event switch
-    //Remove viewlets
-    defaultVDraw();
-}
 
 void
 ViewletView::leftVUpdate()
 {
+    selectedAccountIndex = comboAccountsList->currentIndex();
+    selectedAccount = accountsList->at(selectedAccountIndex);
+
+    //Call this in dboard gnc event switch
     defaultVRemoveWidgets();
+    viewletModel->leftVGenerate(selectedAccount);
     defaultVDraw();
 }
 
@@ -307,7 +305,12 @@ ViewletView::leftVLoad()
 void
 ViewletView::rightVUpdate()
 {
+    selectedAccountIndex = comboAccountsList->currentIndex();
+    selectedAccount = accountsList->at(selectedAccountIndex);
+
+    //Call this in dboard gnc event switch
     defaultVRemoveWidgets();
+    viewletModel->rightVGenerate(selectedAccount);
     defaultVDraw();
 }
 
