@@ -190,7 +190,7 @@ ViewletView::defaultVDraw()
               of the viewlet for later removal during update */
             viewletWidgetContainersList.append(dateLevelContainer);
 
-            defaultVLayout->addWidget(dateLevelContainer);
+            defaultVLayout->addWidget(dateLevelContainer, 10, Qt::AlignTop);
 
             txnDate = viewletModel->tempEntry.txnDate;
             setLabel(txnDate, "dateWidget", dateLayout);
