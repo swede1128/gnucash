@@ -37,6 +37,8 @@ public:
     void leftVSet(QWidget * parent, QHBoxLayout * FPOLayout);
     void rightVSet(QWidget * parent, QHBoxLayout * FPOLayout);
 
+    void staticVUpdate();
+
 signals:
     void fileLoaded();
 
@@ -59,6 +61,7 @@ private:
        viewlet types. When the viewlet updates, a new viewlet could
        be drawn by first removing the old widgets in this list. */
     QList<QWidget *> viewletWidgetsList;
+    QList<QWidget *> viewletWidgetContainersList;
 
     /** @bugid_1 */
     QComboBox * comboAccountsList;    

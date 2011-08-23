@@ -185,7 +185,10 @@ ViewletView::defaultVDraw()
             QWidget *dateLevelContainer = new QWidget();
             QVBoxLayout *dateLayout = new QVBoxLayout;
             dateLevelContainer->setLayout(dateLayout);
-            //viewletWidgetsList.append(dateLevelContainer);
+
+            /* Append the pointer of this top level widget
+              of the viewlet for later removal during update */
+            viewletWidgetContainersList.append(dateLevelContainer);
 
             defaultVLayout->addWidget(dateLevelContainer);
 
@@ -196,7 +199,6 @@ ViewletView::defaultVDraw()
             accountLayout = new QVBoxLayout;
             accountLevelContainer->setLayout(accountLayout);
             dateLayout->addWidget(accountLevelContainer);
-            //viewletWidgetsList.append(accountLevelContainer);
         }
 
         QVBoxLayout *descriptionAmountLayout;
@@ -205,7 +207,6 @@ ViewletView::defaultVDraw()
             QWidget *singleAccountLevelContainer = new QWidget();
             QVBoxLayout *singleAccountLayout = new QVBoxLayout();
             singleAccountLevelContainer->setLayout(singleAccountLayout);
-            //viewletWidgetsList.append(singleAccountLevelContainer);
 
             accountLayout->addWidget(singleAccountLevelContainer);
 
@@ -216,7 +217,6 @@ ViewletView::defaultVDraw()
             QWidget *descriptionAmountLevelContainer = new QWidget();
             descriptionAmountLayout = new QVBoxLayout();
             descriptionAmountLevelContainer->setLayout(descriptionAmountLayout);
-            //viewletWidgetsList.append(descriptionAmountLevelContainer);
 
             // 2
             singleAccountLayout->addWidget(descriptionAmountLevelContainer);
@@ -234,17 +234,16 @@ ViewletView::defaultVDraw()
 void
 ViewletView::defaultVRemoveWidgets()
 {
-    /* Remove old widgets */
-    int numOfWidgets = viewletWidgetsList.count();
-    for (int i=0; i<numOfWidgets; ++i)
+    /* Remove old widgets. */
+    int numOfContainers = viewletWidgetContainersList.count();
+    for (int i=0; i<numOfContainers; ++i)
     {
-        //QWidget *wdg = viewletWidgetsList.at(i);
-        delete viewletWidgetsList.at(i);
+        delete viewletWidgetContainersList.at(i);
     }
 
     /* Empty the data structures */
     viewletModel->queueEntries.clear();
-    viewletWidgetsList.clear();
+    viewletWidgetContainersList.clear();
 }
 
 /**********/
@@ -278,6 +277,14 @@ ViewletView::defaultVUpdate()
 
     defaultVRemoveWidgets();
     viewletModel->defaultVGenerate(selectedAccount);
+    defaultVDraw();
+}
+
+void
+ViewletView::staticVUpdate()
+{
+    //Call this in dboard gnc event switch
+    //Remove viewlets
     defaultVDraw();
 }
 

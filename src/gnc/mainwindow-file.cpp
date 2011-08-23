@@ -542,7 +542,7 @@ void MainWindow::loadFile(const QString &fileName)
         ui->treeView->setModel(m_accountTreeModel);
         /* Load the tree in combo boxes of dashboard */
         dboard->loadAccountsTreeComboBox(m_accountListModel);
-        //dboard->fpoWidget->defaultViewlet->loadAccountsTreeComboBox(m_accountListModel);
+        dboard->fpoWidget->defaultViewlet->loadAccountsTreeComboBox(m_accountListModel);
         dboard->fpoWidget->leftViewlet->loadAccountsTreeComboBox(m_accountListModel);
         dboard->fpoWidget->rightViewlet->loadAccountsTreeComboBox(m_accountListModel);
 
