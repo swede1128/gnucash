@@ -248,16 +248,10 @@ ViewletView::accountCheckOutput()
 void
 ViewletView::descriptionAmountOutput()
 {
-    txnDescription = viewletModel->tempEntry.txnDescription
-            + " [" + viewletModel->tempEntry.splitAccount + "]"+ " ["
-            + "acctEqual? "
-            + QString(viewletModel->tempEntry.isSplitAccountEqual?"T":"F") + "]";
+    txnDescription = viewletModel->tempEntry.txnDescription;
     setLabel(txnDescription, "descWidget", descriptionAmountLayout);
 
-    splitAmount = viewletModel->tempEntry.splitAmount
-            + " [" + viewletModel->tempEntry.txnDate + "]" + " ["
-            + "dateEqual? "
-            + QString(viewletModel->tempEntry.isDateEqual?"T":"F") + "]";
+    splitAmount = viewletModel->tempEntry.splitAmount;
     setLabel(splitAmount, "amountWidget", descriptionAmountLayout);
 }
 
