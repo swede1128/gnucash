@@ -176,6 +176,7 @@ ViewletModel::buildMiniJournalStruct(SplitQList splitList)
             if(txn.getDatePosted() == tempDate)
             {
                 entry.isDateEqual = true;
+                tempDate = txn.getDatePosted();
             }
             else
             {
@@ -202,6 +203,9 @@ ViewletModel::buildMiniJournalStruct(SplitQList splitList)
         splitAmount = split.getAmount();
         PrintAmountInfo printInfo(split, true);
         entry.splitAmount = splitAmount.printAmount(printInfo);
+
+        //qDebug()<<entry.isDateEqual;
+        //qDebug()<<entry.isSplitAccountEqual;
 
         queueEntries.enqueue(entry);
     }

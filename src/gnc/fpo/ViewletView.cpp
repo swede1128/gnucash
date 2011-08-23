@@ -223,10 +223,17 @@ ViewletView::defaultVDraw()
 
         }
 
-        txnDescription = viewletModel->tempEntry.txnDescription + " [" + viewletModel->tempEntry.splitAccount + "]";
+        //QString foo = QString::tout (viewletModel->tempEntry.isSplitAccountEqual);
+        txnDescription = viewletModel->tempEntry.txnDescription
+                + " [" + viewletModel->tempEntry.splitAccount + "]"+ " ["
+                + "acctEqual? "
+                + QString(viewletModel->tempEntry.isSplitAccountEqual?"T":"F") + "]";
         setLabel(txnDescription, "descWidget", descriptionAmountLayout);
 
-        splitAmount = viewletModel->tempEntry.splitAmount + " [" + viewletModel->tempEntry.txnDate + "]";
+        splitAmount = viewletModel->tempEntry.splitAmount
+                + " [" + viewletModel->tempEntry.txnDate + "]" + " ["
+                + "dateEqual? "
+                + QString(viewletModel->tempEntry.isDateEqual?"T":"F") + "]";
         setLabel(splitAmount, "amountWidget", descriptionAmountLayout);
     }
 }
