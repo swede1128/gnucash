@@ -59,6 +59,7 @@ public:
     AccountListModel *accountsList;
     void loadAccountsTreeComboBox(AccountListModel * const m_accountListModel);
     void showDashboardWidgets();
+    void mainWindowCloseEvent();
 
 public slots:
     void transferFundsWidgetButtonToggled(bool checked);
@@ -105,7 +106,7 @@ private:
     void setUiWidgets();
     void setBasicTxnEntryFormLayout();
     void setFPO();
-    void clearFields();   
+    void clearFields();
 
 private slots:
     void on_btnCreateBasicTxn_clicked();

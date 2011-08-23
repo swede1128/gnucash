@@ -267,6 +267,8 @@ void MainWindow::createToolBars()
     m_dashboardToolBar->setObjectName("m_dashboardToolBar");
     m_btnTransferFundsWidget = new QToolButton;
     m_btnTransferFundsWidget->setCheckable(true);
+    QSettings settings;
+    m_btnTransferFundsWidget->setChecked(settings.value("basic-txn-dockwidget-visible").toBool());
     m_dashboardToolBar->addWidget(m_btnTransferFundsWidget);
 }
 
@@ -572,6 +574,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (maybeSave())
     {
+        dboard->mainWindowCloseEvent();
         writeSettings();
         event->accept();
 

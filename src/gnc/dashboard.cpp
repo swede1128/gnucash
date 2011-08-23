@@ -36,6 +36,9 @@ Dashboard::Dashboard(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Dashboard)
 {
+    QSettings settings;
+    restoreGeometry(settings.value("dashboardGeometry").toByteArray());
+
     ui->setupUi(this);
 
     // Generate UI
@@ -46,7 +49,7 @@ Dashboard::Dashboard(QWidget *parent) :
     //this->tabifyDockWidget(ui->dockwBasicTxn, ui->dockwSplitTxn);
     //ui->dockwBasicTxn->raise();
     ui->dockwSplitTxn->hide();
-    ui->dockwLogViewer->hide();
+    //ui->dockwLogViewer->hide();
 
     /* Set stylesheet, so that some styling to viewlets can be applied */
     /*QFile styleSheetFile(":/qss-default");
@@ -54,10 +57,9 @@ Dashboard::Dashboard(QWidget *parent) :
     QString styleSheetName = QLatin1String(styleSheetFile.readAll());
     this->setStyleSheet(styleSheetName);*/
 
-
-    QSettings settings;
     restoreState(settings.value("dashboardState").toByteArray());
-    restoreDockWidget(ui->dockwBasicTxn);
+    bool isBasicTxnDockVisible = settings.value("basic-txn-dockwidget-visible").toBool();
+    ui->dockwBasicTxn->setVisible(isBasicTxnDockVisible);
 
     /*
     // Trying to restore pos and size of dockwidget manually
@@ -74,16 +76,22 @@ Dashboard::Dashboard(QWidget *parent) :
 
 Dashboard::~Dashboard()
 {
-    QSettings settings;
-    settings.setValue("dashboardState", saveState());
-
     /*
     QSettings settings;
     settings.setValue("basic-txn-entry-dockwidget-pos", ui->dockwBasicTxn->pos());
     settings.setValue("basic-txn-entry-dockwidget-size", ui->dockwBasicTxn->size());
     */
-
     delete ui;
+}
+
+void
+Dashboard::mainWindowCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("dashboardGeometry", saveGeometry());
+    settings.setValue("dashboardState", saveState());
+    settings.setValue("basic-txn-dockwidget-visible", ui->dockwBasicTxn->isVisible());
+    qDebug()<<"while writing dockwdg is "<<settings.value("basic-txn-dockwidget-visible").toBool();
 }
 
 void
