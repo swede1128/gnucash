@@ -25,6 +25,7 @@
 
 #include "dashboard.hpp"
 #include "ui_dashboard.h"
+#include "engine/gnc-event.h" // for GNC_EVENT_ITEM_ADDED
 
 #include <QtGui>
 #include <QAbstractItemModel>
@@ -34,7 +35,8 @@ namespace gnc
 {
 Dashboard::Dashboard(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::Dashboard)
+    ui(new Ui::Dashboard),
+    m_eventWrapper(*this, &Dashboard::transactionEvent)
 {
     QSettings settings;
     restoreGeometry(settings.value("dashboardGeometry").toByteArray());
@@ -49,7 +51,7 @@ Dashboard::Dashboard(QWidget *parent) :
     //this->tabifyDockWidget(ui->dockwBasicTxn, ui->dockwSplitTxn);
     //ui->dockwBasicTxn->raise();
     ui->dockwSplitTxn->hide();
-    //ui->dockwLogViewer->hide();
+    ui->dockwLogViewer->hide();
 
     /* Set stylesheet, so that some styling to viewlets can be applied */
     /*QFile styleSheetFile(":/qss-default");
@@ -91,7 +93,7 @@ Dashboard::mainWindowCloseEvent()
     settings.setValue("dashboardGeometry", saveGeometry());
     settings.setValue("dashboardState", saveState());
     settings.setValue("basic-txn-dockwidget-visible", ui->dockwBasicTxn->isVisible());
-    qDebug()<<"while writing dockwdg is "<<settings.value("basic-txn-dockwidget-visible").toBool();
+    //qDebug()<<"while writing dockwdg visibility is "<<settings.value("basic-txn-dockwidget-visible").toBool();
 }
 
 void
@@ -178,6 +180,31 @@ Dashboard::clearFields()
     lineAmount->clear();
     lineMemo->clear();
     lineNum->clear();
+}
+
+void
+Dashboard::transactionEvent( ::Transaction* trans, QofEventId event_type)
+{
+    qDebug() << "Dashboard::transactionEvent, id=" << qofEventToString(event_type);
+    switch (event_type)
+    {
+    case QOF_EVENT_MODIFY:
+        // Call refreshViewlet here
+        break;
+    case GNC_EVENT_ITEM_REMOVED:
+    case GNC_EVENT_ITEM_ADDED:
+        // This event is triggered by a split being added (or removed)
+        // to a transaction. Ignored because we already reacted upon
+        // the MODIFY event.
+        break;
+    case QOF_EVENT_CREATE:
+        // This event is triggered by a newly created transaction, but
+        // we reacted on this in the accountEvent handler already.
+        break;
+    default:
+        qDebug() << "Dashboard::transactionEvent, ignored event id=" << qofEventToString(event_type);
+        break;
+    }
 }
 
 void

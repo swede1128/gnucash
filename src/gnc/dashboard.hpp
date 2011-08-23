@@ -33,6 +33,7 @@ extern "C"
 
 #include "AccountItemModel.hpp"
 #include "fpo/FPO.hpp"
+#include "gnc/QofEventWrapper.hpp"
 
 #include <QMainWindow>
 #include <QAbstractItemModel>
@@ -63,6 +64,7 @@ public:
 
 public slots:
     void transferFundsWidgetButtonToggled(bool checked);
+    void transactionEvent( ::Transaction* trans, QofEventId event_type);
 
 private:
     Ui::Dashboard *ui;
@@ -107,6 +109,7 @@ private:
     void setBasicTxnEntryFormLayout();
     void setFPO();
     void clearFields();
+    QofEventWrapper<Dashboard, ::Transaction*> m_eventWrapper;
 
 private slots:
     void on_btnCreateBasicTxn_clicked();
