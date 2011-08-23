@@ -304,7 +304,7 @@ void
 ViewletView::leftVLoad()
 {
     selectedAccount = accountsList->at(1);
-
+    defaultVRemoveWidgets();
     viewletModel->leftVGenerate(selectedAccount);
     defaultVDraw();
 }
@@ -325,7 +325,7 @@ void
 ViewletView::rightVLoad()
 {
     selectedAccount = accountsList->at(1);
-
+    defaultVRemoveWidgets();
     viewletModel->rightVGenerate(selectedAccount);
     defaultVDraw();
 }
