@@ -36,7 +36,8 @@ namespace gnc
 Dashboard::Dashboard(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Dashboard),
-    m_eventWrapper(*this, &Dashboard::transactionEvent)
+    m_eventWrapper(*this, &Dashboard::transactionEvent),
+    m_eventWrapperAccount(*this, &Dashboard::accountEvent)
 {
     QSettings settings;
     restoreGeometry(settings.value("dashboardGeometry").toByteArray());
@@ -99,7 +100,8 @@ Dashboard::mainWindowCloseEvent()
 void
 Dashboard::showDashboardWidgets()
 {
-    ui->dockwBasicTxn->show();
+    QSettings settings;
+    ui->dockwBasicTxn->setVisible(settings.value("basic-txn-dockwidget-visible").toBool());
     ui->dockwFPO->show();
 }
 
@@ -189,9 +191,9 @@ Dashboard::transactionEvent( ::Transaction* trans, QofEventId event_type)
     switch (event_type)
     {
     case QOF_EVENT_MODIFY:
-        // Call refreshViewlet here
         fpoWidget->leftViewlet->leftVUpdate();
         fpoWidget->rightViewlet->rightVUpdate();
+        fpoWidget->defaultViewlet->defaultVUpdate();
         break;
     case GNC_EVENT_ITEM_REMOVED:
     case GNC_EVENT_ITEM_ADDED:
@@ -208,6 +210,33 @@ Dashboard::transactionEvent( ::Transaction* trans, QofEventId event_type)
         break;
     }
 }
+
+void
+Dashboard::accountEvent( ::Account* acc, QofEventId event_type)
+{
+    //qDebug() << "Dashboard::accountEvent, id=" << qofEventToString(event_type);
+
+    switch (event_type)
+    {
+    case GNC_EVENT_ITEM_REMOVED:
+        fpoWidget->leftViewlet->leftVUpdate();
+        fpoWidget->rightViewlet->rightVUpdate();
+        fpoWidget->defaultViewlet->defaultVUpdate();
+        break;
+    case GNC_EVENT_ITEM_CHANGED:
+    case GNC_EVENT_ITEM_ADDED:
+    case QOF_EVENT_MODIFY:
+        // These events are also triggered e.g. by a newly added
+        // transaction/split in this account. However, we already
+        // reacted on this by the above events, so we can ignore them
+        // here.
+        break;
+    default:
+        qDebug() << "Dashboard::accountEvent, ignored event id=" << qofEventToString(event_type);
+        break;
+    }
+}
+
 
 void
 Dashboard::loadAccountsTreeComboBox(AccountListModel * const m_accountsListModel)

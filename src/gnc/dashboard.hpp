@@ -65,6 +65,7 @@ public:
 public slots:
     void transferFundsWidgetButtonToggled(bool checked);
     void transactionEvent( ::Transaction* trans, QofEventId event_type);
+    void accountEvent( ::Account* acc, QofEventId event_type);
 
 private:
     Ui::Dashboard *ui;
@@ -110,6 +111,7 @@ private:
     void setFPO();
     void clearFields();
     QofEventWrapper<Dashboard, ::Transaction*> m_eventWrapper;
+    QofEventWrapper<Dashboard, ::Account*> m_eventWrapperAccount;
 
 private slots:
     void on_btnCreateBasicTxn_clicked();

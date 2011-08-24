@@ -44,6 +44,7 @@ signals:
     void fileLoaded();
 
 public slots:
+    void defaultVUpdate();
 
 private:
     ViewletModel *viewletModel;
@@ -91,8 +92,6 @@ private:
     void descriptionAmountOutput();
 
 private slots:
-    void defaultVUpdate();
-
     void leftVLoad();
     void rightVLoad();
 };
