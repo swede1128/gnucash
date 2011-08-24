@@ -152,6 +152,7 @@ src/engine/test/test-split-vs-account
 src/engine/test/test-transaction-reversal
 src/engine/test/test-transaction-voiding
 src/engine/test/translog.*.log
+src/gnc/html
 src/gnc-module/gnucash
 src/gnc-module/test/test-agedver
 src/gnc-module/test/test-dynload
