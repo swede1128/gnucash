@@ -248,11 +248,16 @@ ViewletView::accountCheckOutput()
 void
 ViewletView::descriptionAmountOutput()
 {
+    QWidget *wdg = new QWidget();
+    QHBoxLayout *lay = new QHBoxLayout;
+    wdg->setLayout(lay);
+    descriptionAmountLayout->addWidget(wdg);
+
     txnDescription = viewletModel->tempEntry.txnDescription;
-    setLabel(txnDescription, "descWidget", descriptionAmountLayout);
+    setLabel(txnDescription, "descWidget", lay);
 
     splitAmount = viewletModel->tempEntry.splitAmount;
-    setLabel(splitAmount, "amountWidget", descriptionAmountLayout);
+    setLabel(splitAmount, "amountWidget", lay);
 }
 
 void
@@ -277,6 +282,18 @@ ViewletView::setLabel(QString data, QString objectName, QVBoxLayout *layout)
 {
     QLabel *lbl = new QLabel();
     lbl->setText(data);
+    layout->addWidget(lbl);
+    /* Used as CSS ID by QStyleSheet */
+    lbl->setObjectName(objectName);
+    viewletWidgetsList.append(lbl);
+}
+
+void
+ViewletView::setLabel(QString data, QString objectName, QHBoxLayout *layout)
+{
+    QLabel *lbl = new QLabel();
+    lbl->setText(data);
+    lbl->setMargin(0);
     layout->addWidget(lbl);
     /* Used as CSS ID by QStyleSheet */
     lbl->setObjectName(objectName);

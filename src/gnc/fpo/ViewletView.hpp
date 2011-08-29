@@ -77,7 +77,9 @@ private:
     int selectedAccountIndex;
 
     /* Widget generator */
+    //template<typename T> T setLabel(T number) { return number*2; }
     void setLabel(QString data, QString objectName, QVBoxLayout *layout);
+    void setLabel(QString data, QString objectName, QHBoxLayout *layout);
 
     /* Viewlet generator methods */
     void defaultVDraw();
